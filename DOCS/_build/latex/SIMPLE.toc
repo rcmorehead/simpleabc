@@ -1,0 +1,5 @@
+\select@language {english}
+\contentsline {paragraph}{Methods}{1}{paragraph*.5}
+\contentsline {chapter}{\numberline {1}Indices and tables}{3}{chapter.1}
+\contentsline {chapter}{Python Module Index}{5}{section*.6}
+\contentsline {chapter}{Index}{7}{section*.7}
