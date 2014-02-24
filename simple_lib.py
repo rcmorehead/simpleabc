@@ -1,11 +1,32 @@
-'''
+"""
+Useful classes and functions for SIMPLE. 
+"""
 
-'''
 
 class System(object):
+    """
+    A container class for system parameters.
+
+    Parameters
+    ----------
+    #TODO
+    Returns
+    -------
+    Nothing yet
+
+    Methods
+    -------
+    System.add_planet(planet)
+        Add a simple_lib.Planet object to the system
+
+    """
+
 
     def __init__(self):
-        pass
+        self.planets = [] #A list may not be the best thing for this
+
+    def add_planet(self,planet):
+        self.planets.append(planet)
 
 
 class Planet(object):
@@ -23,8 +44,13 @@ class Planet(object):
     a : float
         Semimajor axis in AU
 
+    Attributes
+    ----------
+    #TODO
+
     Returns
     -------
+    #TODO
 
     Methods
     -------
@@ -44,7 +70,7 @@ class Planet(object):
         self.period = new_period
 
     def get_period(self):
-         return self.period
+        return self.period
 
 
 def main(self):

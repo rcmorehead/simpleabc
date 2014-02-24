@@ -65,16 +65,37 @@
           <div class="body">
             
   <h1>Source code for simple_lib</h1><div class="highlight"><pre>
-<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Useful classes and functions for SIMPLE. </span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
 
-<span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="System"><a class="viewcode-back" href="../index.html#simple_lib.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A container class for system parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    #TODO</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Nothing yet</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    System.add_planet(planet)</span>
+<span class="sd">        Add a simple_lib.Planet object to the system</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">planets</span> <span class="o">=</span> <span class="p">[]</span> <span class="c">#A list may not be the best thing for this</span>
 
+    <span class="k">def</span> <span class="nf">add_planet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">planet</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">planets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">planet</span><span class="p">)</span>
 
+</div>
 <div class="viewcode-block" id="Planet"><a class="viewcode-back" href="../index.html#simple_lib.Planet">[docs]</a><span class="k">class</span> <span class="nc">Planet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A container class for planet parameters.</span>
@@ -90,8 +111,13 @@
 <span class="sd">    a : float</span>
 <span class="sd">        Semimajor axis in AU</span>
 
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    #TODO</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+<span class="sd">    #TODO</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
@@ -111,7 +137,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">new_period</span>
 
     <span class="k">def</span> <span class="nf">get_period</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
 
 </div>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

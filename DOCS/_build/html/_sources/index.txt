@@ -16,6 +16,9 @@ Contents:
 .. autoclass:: Planet
 	:members:
 
+.. autoclass:: System
+	:members:
+
 Indices and tables
 ==================
 
