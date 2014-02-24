@@ -1,5 +1,5 @@
 """
-Useful classes and functions for SIMPLE. 
+Useful classes and functions for SIMPLE.
 """
 
 
