@@ -33,6 +33,8 @@ class Planet(object):
     """
     A container class for planet parameters.
 
+    Probably a dead end, going to try a record array based approach
+
     Parameters
     ----------
     period : float
