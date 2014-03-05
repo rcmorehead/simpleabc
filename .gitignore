@@ -1,3 +1,5 @@
+#Files that we don't want to track
+nph-nstedAPI.txt
 *.py[cod]
 
 # C extensions

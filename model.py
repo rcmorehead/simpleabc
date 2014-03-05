@@ -14,6 +14,9 @@ class PlanetsModel(object):
     def planets_per_system(self):
         pass
 
+    def planet_period(self):
+        pass
+
     def planet_mass(self):
         pass
 
