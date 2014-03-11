@@ -45,27 +45,27 @@ def main():
 
     assert planet_counts.sum() == bs.size
 
-    f = np.recfromcsv('stars.csv',
+    stars = np.recfromcsv('stars.csv',
                       dtype=('int','float','float','float','float'))
-
-    #print  f.dtype
-    #print  f
-    star_header = list(f.dtype.names)
-    planet_header = ['rp', 'b', 'P']
 
     model = model_def.Model()
 
-    epsilon = 0.1
+    star_header = list(stars.dtype.names)
+    planet_header = model.planet_parameters
+
+
+
+    epsilon = 0.05
 
 
     ac_Dc, ac_Db, ac_n, ac_sig = [],[],[],[]
     re_Dc, re_Db, re_n, re_sig = [],[],[],[]
 
     for n in range(N):
-        binom_n = stats.randint.rvs(1,15,1)
+        binom_n = stats.randint.rvs(1,10,1)
         sigma = stats.uniform.rvs(0,10,1)
 
-        planet_numbers = model.planets_per_system(binom_n, f['kepid'].size)
+        planet_numbers = model.planets_per_system(binom_n, stars['kepid'].size)
         impact_parameters = model.planet_b(planet_numbers.sum(), sigma)
 
         catalog = np.zeros(impact_parameters.size,
@@ -73,53 +73,18 @@ def main():
                                   'formats': (['i8'] + ['f8'] * (
                                    len(star_header + planet_header) - 1))})
 
-        #planet_counter, system_limit = 0, planet_numbers[0]
-        #id_count, dex, = 0, 0
+
 
 
         catalog['b'] = impact_parameters
 
         for h in star_header:
-            catalog[h] = np.repeat(f[h],planet_numbers)
+            catalog[h] = np.repeat(stars[h], planet_numbers)
 
 
-
-        #for i in xrange(catalog['b'].size):
-        #    planet_counter += 1
-        #    if 1.0 > impact_parameters[i] > -1.0:
-        #        #catalog[dex]['kepid'] = f[id_count]['kepid']
-
-
-                #catalog['b'][dex] = impact_parameters[i]
-        #        dex += 1
-        #    else:
-        #        pass
-        #    if planet_counter == system_limit:
-        #        planet_counter = 0
-        #        id_count += 1
-         #       system_limit = planet_numbers[id_count]
-
-
-
-            #catalog = np.core.records.fromarrays([stars[x] for x in star_header] +
-            #[planets[x] for x in planet_header]
-            #, names = star_header + planet_header,
-            #formats = ('|S15, ' + 'float64, '
-            #           * (len(star_header
-            #                  + planet_header) - 1)))
 
         assert isinstance(catalog, object)
-        #print  catalog
 
-            # catalog['kepid'], catalog['mass'], catalog['teff'], catalog['b']
-
-            # out = file('test_cat.dat', 'w')
-            # np.savetxt(out, catalog, delimiter=',',
-            #            fmt=['%s15']+['%10.5f']*(len(catalog.dtype.names)-1),
-            #            newline='\n',
-            #            header=','.join(x for x in star_header+planet_header),
-            #            comments='')
-            # out.close()
 
         transits = np.where((1.0 > catalog['b']) & (catalog['b'] > -1.0))
         pcount = np.bincount(catalog['kepid'][transits])
@@ -143,6 +108,7 @@ def main():
             re_sig.append(sigma)
 
     print  time.time() - start
+    f1 = plt.figure()
     plt.plot(re_n, re_sig, 'ko',alpha=.4)
     plt.plot(ac_n, ac_sig, 'bo',alpha=.8)
     plt.axhline(2,ls='--')
@@ -150,6 +116,8 @@ def main():
     plt.xlabel('n')
     plt.ylabel('sigma')
     plt.suptitle(r'$\epsilon$ = {} n = {}'.format(epsilon,N))
-    plt.show()
+    #plt.show()
+    plt.savefig('{}.eps'.format(sys.argv[2]))
+
 if __name__ == "__main__":
     main()

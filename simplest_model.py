@@ -9,3 +9,9 @@ class Model(model.PlanetsModel):
 
         def planet_b(self, n, sigma):
             return stats.norm.rvs(scale=sigma, size=n)
+
+        def abc_reduce(self,data):
+            pass
+
+        def distance_function(self,simulation,observed):
+            return stats.ks_2samp(simulation, observed)[0]
