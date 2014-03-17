@@ -16,7 +16,7 @@ class PlanetsModel(object):
                        'feh_err1', 'mass', 'mass_err1', 'radius', 'radius_err1',
                        'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
     
-    planet_parameters = ['b', 'i', 'planet_mass', 'planet_radius']
+    planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius', 'period']
 
     def __init__(self):
         pass

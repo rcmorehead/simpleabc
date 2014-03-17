@@ -10,6 +10,9 @@ class Model(model.PlanetsModel):
         def planet_b(self, n, sigma):
             return stats.norm.rvs(scale=sigma, size=n)
 
+        def planet_period(self,size):
+            return 10**stats.uniform.rvs(-2, 5, size=size)
+
 
 class ABC(model.ABC):
 

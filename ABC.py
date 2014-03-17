@@ -13,6 +13,7 @@ import numpy as np
 import time
 from scipy import stats
 import pylab as plt
+from simple_lib import *
 
 #@profile
 # noinspection PyNoneFunctionAssignment
@@ -63,22 +64,31 @@ def main():
         binom_n = stats.randint.rvs(1, 10, 1)
         sigma = stats.uniform.rvs(0, 10, 1)
 
+        #Draw the number of planets per star.
         planet_numbers = model.planets_per_system(binom_n,
                                                   stars['ktc_kepler_id'].size)
-        impact_parameters = model.planet_b(planet_numbers.sum(), sigma)
 
-        catalog = np.zeros(impact_parameters.size,
+
+        #Initalize synthetic catalog.
+        catalog = np.zeros(planet_numbers.sum(),
                            dtype={'names': star_header + planet_header,
-                                  'formats': (['i8'] + ['f8'] * (
-                                   len(star_header + planet_header) - 1))})
+                                  'formats': (['i8'] + ['f8'] *
+                                              (len(star_header + planet_header)
+                                               - 1))})
 
-        catalog['b'] = impact_parameters
+        #Draw the random model parameters.
+        catalog['b'] = model.planet_b(planet_numbers.sum(), sigma)
+        catalog['period'] = model.planet_period(planet_numbers.sum())
 
         for h in star_header:
             catalog[h] = np.repeat(stars[h], planet_numbers)
 
         assert isinstance(catalog, object)
 
+       # print catalog.dtype.names
+
+        #Compute derived parameters.
+        catalog['a'] = semimajor_axis(catalog['period'], catalog['mass'])
 
         ABC_model = model_def.ABC()
 
@@ -102,12 +112,12 @@ def main():
     print  time.time() - start
     f1 = plt.figure()
     plt.plot(re_n, re_sig, 'ko',alpha=.4)
-    plt.plot(ac_n, ac_sig, 'bo',alpha=.8)
+    plt.plot(ac_n, ac_sig, 'bo',alpha=1)
     plt.axhline(2,ls='--')
     plt.axvline(5,ls='--')
-    plt.xlabel('n')
-    plt.ylabel('sigma')
-    plt.suptitle(r'$\epsilon$ = {} n = {}'.format(epsilon,N))
+    plt.xlabel('n', fontsize=18)
+    plt.ylabel('sigma', fontsize=18)
+    plt.suptitle(r'$\epsilon$ = {} n = {}'.format(epsilon,N), fontsize=18)
     #plt.show()
     plt.savefig('{}.pdf'.format(sys.argv[2]))
 
