@@ -15,6 +15,7 @@ from scipy import stats
 import pylab as plt
 
 #@profile
+# noinspection PyNoneFunctionAssignment
 def main():
     start = time.time()
     N = int(sys.argv[4])
@@ -41,16 +42,13 @@ def main():
     planet_counts = np.array(planet_counts)
     bs = np.array(bs)
 
-
-
     assert planet_counts.sum() == bs.size
 
-    stars = np.recfromcsv('stars.csv',
-                      dtype=('int','float','float','float','float'))
+    stars = np.recfromcsv('stars.csv')
 
     model = model_def.Model()
 
-    star_header = list(stars.dtype.names)
+    star_header = model.star_parameters
     planet_header = model.planet_parameters
 
 
@@ -58,14 +56,15 @@ def main():
     epsilon = 0.05
 
 
-    ac_Dc, ac_Db, ac_n, ac_sig = [],[],[],[]
-    re_Dc, re_Db, re_n, re_sig = [],[],[],[]
+    ac_Dc, ac_Db, ac_n, ac_sig = [], [], [], []
+    re_Dc, re_Db, re_n, re_sig = [], [], [], []
 
     for n in range(N):
-        binom_n = stats.randint.rvs(1,10,1)
-        sigma = stats.uniform.rvs(0,10,1)
+        binom_n = stats.randint.rvs(1, 10, 1)
+        sigma = stats.uniform.rvs(0, 10, 1)
 
-        planet_numbers = model.planets_per_system(binom_n, stars['kepid'].size)
+        planet_numbers = model.planets_per_system(binom_n,
+                                                  stars['ktc_kepler_id'].size)
         impact_parameters = model.planet_b(planet_numbers.sum(), sigma)
 
         catalog = np.zeros(impact_parameters.size,
@@ -73,28 +72,21 @@ def main():
                                   'formats': (['i8'] + ['f8'] * (
                                    len(star_header + planet_header) - 1))})
 
-
-
-
         catalog['b'] = impact_parameters
 
         for h in star_header:
             catalog[h] = np.repeat(stars[h], planet_numbers)
 
-
-
         assert isinstance(catalog, object)
 
 
+        ABC_model = model_def.ABC()
+
         transits = np.where((1.0 > catalog['b']) & (catalog['b'] > -1.0))
-        pcount = np.bincount(catalog['kepid'][transits])
-        Dc = stats.ks_2samp(pcount[np.nonzero(pcount)], planet_counts)[0]
-        Db = stats.ks_2samp(bs, catalog['b'][transits])[0]
-        #print  Dc,Db
-
-
-
-
+        pcount = np.bincount(catalog['ktc_kepler_id'][transits])
+        Dc = ABC_model.distance_function(pcount[np.nonzero(pcount)],
+                                         planet_counts)
+        Db = ABC_model.distance_function(bs, catalog['b'][transits])
 
         if Dc <= epsilon and Db <= epsilon:
             ac_Dc.append(Dc)
@@ -117,7 +109,7 @@ def main():
     plt.ylabel('sigma')
     plt.suptitle(r'$\epsilon$ = {} n = {}'.format(epsilon,N))
     #plt.show()
-    plt.savefig('{}.eps'.format(sys.argv[2]))
+    plt.savefig('{}.pdf'.format(sys.argv[2]))
 
 if __name__ == "__main__":
     main()
