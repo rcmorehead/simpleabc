@@ -3,6 +3,10 @@ Useful classes and functions for SIMPLE.
 """
 import numpy as np
 
+r_sun_au = 0.004649
+r_earth_r_sun = 0.009155
+day_hrs = 24.0
+
 
 def impact_parameter(a, e, i, w, r_star):
     """
@@ -18,12 +22,13 @@ def impact_parameter(a, e, i, w, r_star):
     i : int, float or numpy array
         Inclination of planet in degrees. 90 degrees is edge-on.
     w : int, float or numpy array
-        Longitude of acending node defines with respect to sky-plane.
+        Longitude of ascending node defined with respect to sky-plane.
     r_star : int, float or numpy array
         Radius of star in solar radii.
+
     Returns
     -------
-    impact parameter : float or numpy array
+    b : float or numpy array
         The impact parameter, ie transit latitude in units of stellar radius.
 
     Examples
@@ -45,7 +50,7 @@ def impact_parameter(a, e, i, w, r_star):
     ISBN 978-0-8165-2945-2.
     """
 
-    return abs(a/(r_star * 0.004649) * np.cos(np.radians(i)) *
+    return abs(a/(r_star * r_sun_au) * np.cos(np.radians(i)) *
               (1 - e**2) / (1 + e * np.sin(np.radians(w))))
 
 
@@ -64,7 +69,7 @@ def semimajor_axis(period, mass):
 
     Returns
     -------
-    semimajor_axis : float or numpy array
+    a : float or numpy array
         The semimajor axis in AU.
 
     Examples
@@ -93,22 +98,56 @@ def transit_depth():
 
     Examples
     --------
+
+
     """
     pass
 
-def transit_duration():
+def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     """
-    One-line description
+    Compute the full (Q1-Q4) transit duration.
 
     Full description
 
     Parameters
     ----------
+    p : int, float or numpy array
+        Period of planet orbit in days
+    a : int, float or numpy array
+        Semimajor axis of planet's orbit in AU
+    e : int, float or numpy array
+        Eccentricity of planet. WARNING! This function breaks down at
+        high eccentricity (>> 0.9), so be careful!
+    i : int, float or numpy array
+        Inclination of planet in degrees. 90 degrees is edge-on.
+    w : int, float or numpy array
+        Longitude of ascending node defined with respect to sky-plane.
+    b : int, float or numpy array
+        Impact parameter of planet.
+    r_star : int, float or numpy array
+        Radius of star in solar radii.
+    r_planet : int, float or numpy array
+        Radius of planet in Earth radii
 
     Returns
     -------
+    T : float or numpy array
+        The Q1-Q4 (full) transit duration of the planet in hours.
 
     Examples
     --------
+
+    Notes
+    -----
+    Using Eqns. (15) and (16), Chap. 4, Page  58 of Exoplanets, edited by S.
+    Seager. Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+    ISBN 978-0-8165-2945-2.
     """
-    pass
+
+    #TODO Make this robust against b > 1
+
+    return (p / np.pi *
+            np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
+                      np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
+                              - b**2)) *
+            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs

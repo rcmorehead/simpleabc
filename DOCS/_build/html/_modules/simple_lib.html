@@ -71,7 +71,53 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="semimajor_axis"><a class="viewcode-back" href="../index.html#simple_lib.semimajor_axis">[docs]</a><span class="k">def</span> <span class="nf">semimajor_axis</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
+<div class="viewcode-block" id="impact_parameter"><a class="viewcode-back" href="../simple_lib.html#simple_lib.impact_parameter">[docs]</a><span class="k">def</span> <span class="nf">impact_parameter</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">r_star</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the impact parameter at for a transiting planet.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : int, float or numpy array</span>
+<span class="sd">        Semimajor axis of planet&#39;s orbit in AU</span>
+<span class="sd">    e : int, float or numpy array</span>
+<span class="sd">        Eccentricity of planet. WARNING! This function breaks down at</span>
+<span class="sd">        high eccentricity (&gt;&gt; 0.9), so be careful!</span>
+<span class="sd">    i : int, float or numpy array</span>
+<span class="sd">        Inclination of planet in degrees. 90 degrees is edge-on.</span>
+<span class="sd">    w : int, float or numpy array</span>
+<span class="sd">        Longitude of acending node defines with respect to sky-plane.</span>
+<span class="sd">    r_star : int, float or numpy array</span>
+<span class="sd">        Radius of star in solar radii.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    impact parameter : float or numpy array</span>
+<span class="sd">        The impact parameter, ie transit latitude in units of stellar radius.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; impact_parameter(1, 0, 90, 0, 1)</span>
+<span class="sd">    1.3171077641937547e-14</span>
+<span class="sd">    &gt;&gt;&gt; a = np.linspace(.1, 1.5, 3)</span>
+<span class="sd">    &gt;&gt;&gt; e = np.linspace(0, .9, 3)</span>
+<span class="sd">    &gt;&gt;&gt; i = np.linspace(89, 91, 3)</span>
+<span class="sd">    &gt;&gt;&gt; w = np.linspace(0, 360, 3)</span>
+<span class="sd">    &gt;&gt;&gt; r_star = np.linspace(0.1, 10, 3)</span>
+<span class="sd">    &gt;&gt;&gt; impact_parameter(a, e, i, w, r_star)</span>
+<span class="sd">    array([  3.75401300e+00,   1.66398961e-15,   1.06989371e-01])</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.</span>
+<span class="sd">    Tucson, AZ: University of Arizona Press, 2011, 526 pp.</span>
+<span class="sd">    ISBN 978-0-8165-2945-2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">r_star</span> <span class="o">*</span> <span class="mf">0.004649</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">*</span>
+              <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">w</span><span class="p">))))</span>
+
+</div>
+<div class="viewcode-block" id="semimajor_axis"><a class="viewcode-back" href="../simple_lib.html#simple_lib.semimajor_axis">[docs]</a><span class="k">def</span> <span class="nf">semimajor_axis</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the semimajor axis of an object.</span>
 
@@ -99,12 +145,41 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(((</span><span class="mf">2.959E-4</span><span class="o">*</span><span class="n">mass</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">period</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+
 </div>
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../simple_lib.html#simple_lib.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<div class="viewcode-block" id="transit_depth"><a class="viewcode-back" href="../simple_lib.html#simple_lib.transit_depth">[docs]</a><span class="k">def</span> <span class="nf">transit_depth</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    One-line description</span>
+
+<span class="sd">    Full description</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">pass</span>
 </div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+<div class="viewcode-block" id="transit_duration"><a class="viewcode-back" href="../simple_lib.html#simple_lib.transit_duration">[docs]</a><span class="k">def</span> <span class="nf">transit_duration</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    One-line description</span>
+
+<span class="sd">    Full description</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
 </pre></div>
 
           </div>

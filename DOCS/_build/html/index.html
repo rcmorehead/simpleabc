@@ -82,6 +82,63 @@
 </div>
 <span class="target" id="module-simple_lib"></span><p>Useful classes and functions for SIMPLE.</p>
 <dl class="function">
+<dt id="simple_lib.impact_parameter">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">impact_parameter</tt><big>(</big><em>a</em>, <em>e</em>, <em>i</em>, <em>w</em>, <em>r_star</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#impact_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.impact_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the impact parameter at for a transiting planet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Semimajor axis of planet&#8217;s orbit in AU</p>
+</div></blockquote>
+<p><strong>e</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (&gt;&gt; 0.9), so be careful!</p>
+</div></blockquote>
+<p><strong>i</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Inclination of planet in degrees. 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>w</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Longitude of acending node defines with respect to sky-plane.</p>
+</div></blockquote>
+<p><strong>r_star</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of star in solar radii.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>impact parameter</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The impact parameter, ie transit latitude in units of stellar radius.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.
+Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">impact_parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">1.3171077641937547e-14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">89</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">impact_parameter</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">r_star</span><span class="p">)</span>
+<span class="go">array([  3.75401300e+00,   1.66398961e-15,   1.06989371e-01])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="simple_lib.semimajor_axis">
 <tt class="descclassname">simple_lib.</tt><tt class="descname">semimajor_axis</tt><big>(</big><em>period</em>, <em>mass</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#semimajor_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.semimajor_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the semimajor axis of an object.</p>
@@ -117,6 +174,20 @@
 <span class="go">array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.transit_depth">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_depth</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>One-line description</p>
+<p>Full description</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.transit_duration">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_duration</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>One-line description</p>
+<p>Full description</p>
 </dd></dl>
 
 </div>
