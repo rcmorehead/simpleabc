@@ -16,15 +16,18 @@ class PlanetsModel(object):
                        'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
     
     planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius',
-                         'period']
+                         'period', 'mi', 'fund_plane', 'fund_node']
 
     def __init__(self):
+        pass
+
+    def fundamental_node(self):
         pass
 
     def fundamental_plane(self):
         pass
 
-    def mututal_inclination(self):
+    def mutual_inclination(self):
         pass
 
     def planet_inclination(self):
@@ -41,7 +44,6 @@ class PlanetsModel(object):
 
     def planets_per_system(self):
         pass
-
 
 
 class NoiseModel(object):

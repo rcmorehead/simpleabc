@@ -78,7 +78,7 @@ def main():
                                                - 1))})
 
         #Draw the random model parameters.
-        catalog['b'] = model.planet_b(planet_numbers.sum(), sigma)
+
         catalog['period'] = model.planet_period(planet_numbers.sum())
 
         for h in star_header:
@@ -90,7 +90,8 @@ def main():
 
         #Compute derived parameters.
         catalog['a'] = semimajor_axis(catalog['period'], catalog['mass'])
-
+        #catalog['b'] = impact_parameter(catalog['a'],)
+        impact_parameter()
         ABC_model = model_def.ABC()
 
         transits = np.where((1.0 > catalog['b']) & (catalog['b'] > -1.0))

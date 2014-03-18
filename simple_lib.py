@@ -7,7 +7,7 @@ r_sun_au = 0.004649
 r_earth_r_sun = 0.009155
 day_hrs = 24.0
 
-
+#bob
 def impact_parameter(a, e, i, w, r_star):
     """
     Compute the impact parameter at for a transiting planet.
@@ -52,6 +52,18 @@ def impact_parameter(a, e, i, w, r_star):
 
     return abs(a/(r_star * r_sun_au) * np.cos(np.radians(i)) *
               (1 - e**2) / (1 + e * np.sin(np.radians(w))))
+
+
+def inclination(fund_plane, mutual_inc, node):
+
+    #TODO Docstring needed
+    fund_plane = np.radians(fund_plane)
+    mutual_inc = np.radians(mutual_inc)
+    node = np.radians(node)
+
+    return np.degrees(np.arccos(np.cos(fund_plane) * np.cos(mutual_inc) +
+                      np.sin(fund_plane) * np.sin(mutual_inc) * np.cos(node)))
+
 
 
 def semimajor_axis(period, mass):
