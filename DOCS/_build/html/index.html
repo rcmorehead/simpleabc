@@ -81,97 +81,42 @@
 </ul>
 </div>
 <span class="target" id="module-simple_lib"></span><p>Useful classes and functions for SIMPLE.</p>
-<dl class="class">
-<dt id="simple_lib.Planet">
-<em class="property">class </em><tt class="descclassname">simple_lib.</tt><tt class="descname">Planet</tt><big>(</big><em>period</em>, <em>mass</em>, <em>radius</em>, <em>a</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#Planet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.Planet" title="Permalink to this definition">¶</a></dt>
-<dd><p>A container class for planet parameters.</p>
+<dl class="function">
+<dt id="simple_lib.semimajor_axis">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">semimajor_axis</tt><big>(</big><em>period</em>, <em>mass</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#semimajor_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.semimajor_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the semimajor axis of an object.</p>
+<p>This is a simple implementation of the general form Kepler&#8217;s Third law.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>period</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>period</strong> : int, float or numpy array</p>
 <blockquote>
-<div><p>Period in days</p>
+<div><p>The orbital period of the orbiting body in units of days.</p>
 </div></blockquote>
-<p><strong>mass</strong> : float</p>
+<p><strong>mass</strong> : int, float or array-like</p>
 <blockquote>
-<div><p>Mass in Earth masses</p>
-</div></blockquote>
-<p><strong>radius</strong> : float</p>
-<blockquote>
-<div><p>Radius in Earth radii</p>
-</div></blockquote>
-<p><strong>a</strong> : float</p>
-<blockquote>
-<div><p>Semimajor axis in AU</p>
+<div><p>The mass of the central body (or mass sum) in units of solar mass.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>#TODO</strong> :</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>semimajor_axis</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The semimajor axis in AU.</p>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="33%" />
-<col width="67%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>#TODO</td>
-<td>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="45%" />
-<col width="8%" />
-<col width="48%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>planet.set_period(new_period)</td>
-<td>float</td>
-<td>Set planet.period to new_period</td>
-</tr>
-<tr class="row-even"><td>planet.get_period()</td>
-<td>none</td>
-<td>Return planet.period</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="simple_lib.System">
-<em class="property">class </em><tt class="descclassname">simple_lib.</tt><tt class="descname">System</tt><a class="reference internal" href="_modules/simple_lib.html#System"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.System" title="Permalink to this definition">¶</a></dt>
-<dd><p>A container class for system parameters.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>#TODO</strong> :</p>
-<p><strong>Returns</strong> :</p>
-<p><strong>&#8212;&#8212;-</strong> :</p>
-<p class="last"><strong>Nothing yet</strong> :</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="36%" />
-<col width="64%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>System.add_planet(planet)</td>
-<td>Add a simple_lib.Planet object to the system</td>
-</tr>
-</tbody>
-</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">semimajor_axis</span><span class="p">(</span><span class="mf">365.256363</span><span class="p">,</span><span class="mf">1.00</span><span class="p">)</span>
+<span class="go">0.999985270598628</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">semimajor_axis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.08</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="go">array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

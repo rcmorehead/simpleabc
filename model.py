@@ -1,13 +1,12 @@
 '''
-
+Set of base classes for generating Kepler-like synthetic catalogs for
+approximate bayesian computing and various uses limited only by the user's
+imagination.
 '''
 
 
 from scipy import stats
 import numpy as np
-
-def main():
-    print("model.py is not meant to be call directly")
 
 class PlanetsModel(object):
 
@@ -16,25 +15,33 @@ class PlanetsModel(object):
                        'feh_err1', 'mass', 'mass_err1', 'radius', 'radius_err1',
                        'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
     
-    planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius', 'period']
+    planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius',
+                         'period']
 
     def __init__(self):
         pass
 
-    def planets_per_system(self):
+    def fundamental_plane(self):
         pass
 
-    def planet_period(self):
+    def mututal_inclination(self):
+        pass
+
+    def planet_inclination(self):
         pass
 
     def planet_mass(self):
         pass
 
+    def planet_period(self):
+        pass
+
     def planet_radius(self):
         pass
 
-    def planet_inclination(self):
+    def planets_per_system(self):
         pass
+
 
 
 class NoiseModel(object):
@@ -55,8 +62,3 @@ class ABC(object):
         pass
 
 
-def main():
-    pass
-
-if __name__ == "__main__":
-    main()

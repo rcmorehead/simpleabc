@@ -4,6 +4,25 @@ Useful classes and functions for SIMPLE.
 import numpy as np
 
 
+def impact_parameter(a, e, i, w, r_star):
+    """
+    One-line description
+
+    Full description
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    Examples
+    --------
+    """
+    return abs(a/(r_star * 0.004649) * np.cos(np.radians(i)) *
+              (1 - e**2) / (1 + e * np.sin(np.radians(w))))
+
+
 def semimajor_axis(period, mass):
     """
     Compute the semimajor axis of an object.
@@ -33,8 +52,37 @@ def semimajor_axis(period, mass):
     """
     return (((2.959E-4*mass)/(4*np.pi**2))*period**2.0) ** (1.0/3.0)
 
-def main():
+
+def transit_depth():
+    """
+    One-line description
+
+    Full description
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    Examples
+    --------
+    """
     pass
 
-if __name__ == "__main__":
-    main()
+def transit_duration():
+    """
+    One-line description
+
+    Full description
+
+    Parameters
+    ----------
+
+    Returns
+    -------
+
+    Examples
+    --------
+    """
+    pass

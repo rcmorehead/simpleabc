@@ -12,13 +12,8 @@ Contents:
    :maxdepth: 2
 
 .. automodule:: simple_lib
-
-.. autoclass:: Planet
 	:members:
-
-.. autoclass:: System
-	:members:
-
+    
 Indices and tables
 ==================
 

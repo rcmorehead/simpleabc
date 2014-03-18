@@ -60,6 +60,7 @@ def main():
     ac_Dc, ac_Db, ac_n, ac_sig = [], [], [], []
     re_Dc, re_Db, re_n, re_sig = [], [], [], []
 
+    start_catalog = time.time()
     for n in range(N):
         binom_n = stats.randint.rvs(1, 10, 1)
         sigma = stats.uniform.rvs(0, 10, 1)
@@ -109,7 +110,14 @@ def main():
             re_n.append(binom_n)
             re_sig.append(sigma)
 
-    print  time.time() - start
+    end_time = time.time()
+    print """
+    Total: {}s  Catalog Gen + ABC: {}s
+    Overhead: {}s  Time/Catalog: {}s
+    """.format(end_time - start, end_time - start_catalog,
+               start_catalog - start, ((end_time - start_catalog)/float(N)))
+
+
     f1 = plt.figure()
     plt.plot(re_n, re_sig, 'ko',alpha=.4)
     plt.plot(ac_n, ac_sig, 'bo',alpha=1)

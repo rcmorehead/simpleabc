@@ -66,83 +66,43 @@
             
   <h1>Source code for simple_lib</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Useful classes and functions for SIMPLE. </span>
+<span class="sd">Useful classes and functions for SIMPLE.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="System"><a class="viewcode-back" href="../index.html#simple_lib.System">[docs]</a><span class="k">class</span> <span class="nc">System</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="semimajor_axis"><a class="viewcode-back" href="../index.html#simple_lib.semimajor_axis">[docs]</a><span class="k">def</span> <span class="nf">semimajor_axis</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A container class for system parameters.</span>
+<span class="sd">    Compute the semimajor axis of an object.</span>
+
+<span class="sd">    This is a simple implementation of the general form Kepler&#39;s Third law.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    #TODO</span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    Nothing yet</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    System.add_planet(planet)</span>
-<span class="sd">        Add a simple_lib.Planet object to the system</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">planets</span> <span class="o">=</span> <span class="p">[]</span> <span class="c">#A list may not be the best thing for this</span>
-
-    <span class="k">def</span> <span class="nf">add_planet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">planet</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">planets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">planet</span><span class="p">)</span>
-
-</div>
-<div class="viewcode-block" id="Planet"><a class="viewcode-back" href="../index.html#simple_lib.Planet">[docs]</a><span class="k">class</span> <span class="nc">Planet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A container class for planet parameters.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    period : float</span>
-<span class="sd">        Period in days</span>
-<span class="sd">    mass : float</span>
-<span class="sd">        Mass in Earth masses</span>
-<span class="sd">    radius : float</span>
-<span class="sd">        Radius in Earth radii</span>
-<span class="sd">    a : float</span>
-<span class="sd">        Semimajor axis in AU</span>
-
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
-<span class="sd">    #TODO</span>
+<span class="sd">    period : int, float or numpy array</span>
+<span class="sd">        The orbital period of the orbiting body in units of days.</span>
+<span class="sd">    mass : int, float or array-like</span>
+<span class="sd">        The mass of the central body (or mass sum) in units of solar mass.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    #TODO</span>
+<span class="sd">    semimajor_axis : float or numpy array</span>
+<span class="sd">        The semimajor axis in AU.</span>
 
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    planet.set_period(new_period) : float</span>
-<span class="sd">        Set planet.period to new_period</span>
-<span class="sd">    planet.get_period() : none</span>
-<span class="sd">        Return planet.period</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; semimajor_axis(365.256363,1.00)</span>
+<span class="sd">    0.999985270598628</span>
+
+<span class="sd">    &gt;&gt;&gt; semimajor_axis(np.linspace(1, 1000, 5),np.linspace(0.08, 4, 5))</span>
+<span class="sd">    array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">,</span> <span class="n">mass</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">period</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mass</span> <span class="o">=</span> <span class="n">mass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
-
-    <span class="k">def</span> <span class="nf">set_period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_period</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">new_period</span>
-
-    <span class="k">def</span> <span class="nf">get_period</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
-
+    <span class="k">return</span> <span class="p">(((</span><span class="mf">2.959E-4</span><span class="o">*</span><span class="n">mass</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">period</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
 </div>
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../simple_lib.html#simple_lib.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="k">pass</span>
-
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
