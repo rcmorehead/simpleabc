@@ -6,19 +6,45 @@ import numpy as np
 
 def impact_parameter(a, e, i, w, r_star):
     """
-    One-line description
-
-    Full description
+    Compute the impact parameter at for a transiting planet.
 
     Parameters
     ----------
-
+    a : int, float or numpy array
+        Semimajor axis of planet's orbit in AU
+    e : int, float or numpy array
+        Eccentricity of planet. WARNING! This function breaks down at
+        high eccentricity (>> 0.9), so be careful!
+    i : int, float or numpy array
+        Inclination of planet in degrees. 90 degrees is edge-on.
+    w : int, float or numpy array
+        Longitude of acending node defines with respect to sky-plane.
+    r_star : int, float or numpy array
+        Radius of star in solar radii.
     Returns
     -------
+    impact parameter : float or numpy array
+        The impact parameter, ie transit latitude in units of stellar radius.
 
     Examples
     --------
+    >>> impact_parameter(1, 0, 90, 0, 1)
+    1.3171077641937547e-14
+    >>> a = np.linspace(.1, 1.5, 3)
+    >>> e = np.linspace(0, .9, 3)
+    >>> i = np.linspace(89, 91, 3)
+    >>> w = np.linspace(0, 360, 3)
+    >>> r_star = np.linspace(0.1, 10, 3)
+    >>> impact_parameter(a, e, i, w, r_star)
+    array([  3.75401300e+00,   1.66398961e-15,   1.06989371e-01])
+
+    Notes
+    -----
+    Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.
+    Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+    ISBN 978-0-8165-2945-2.
     """
+
     return abs(a/(r_star * 0.004649) * np.cos(np.radians(i)) *
               (1 - e**2) / (1 + e * np.sin(np.radians(w))))
 
