@@ -22,6 +22,10 @@ def main():
     N = int(sys.argv[4])
 
     if len(sys.argv) == 6:
+        print """
+        Creating and saving a realization of the forward model as {}
+        """.format(sys.argv[5])
+
         out = file(sys.argv[5], 'w')
         N = 1
 
@@ -29,44 +33,48 @@ def main():
     #Load input stars and model
     model_def = __import__(sys.argv[2])
 
-    planet_count = 1
+    planet_count = 0
     planet_counts, bs = [], []
     last_star = None
     for line in file(sys.argv[3]):
         line = line.split(',')
+        # for k,l in enumerate(line):
+        #    print k,l
+        # sys.exit()
         if line[0] == 'ktc_kepler_id':
             continue
-        if 1.0 > float(line[15]) > -1.0:
+        if 1.0 >= float(line[15]) >= -1.0:
             bs.append(float(line[15]))
-            if last_star == line[0]:
-                planet_count += 1
-            else:
+            planet_count += 1
+            if last_star != line[0] and last_star is not None:
                 planet_counts.append(planet_count)
-                planet_count = 1
+                planet_count = 0
             last_star = line[0]
+    if planet_count != 0:
+        planet_counts.append(planet_count)
+        #print line[15], planet_count
+        #print sum(planet_counts), len(bs)
 
     planet_counts = np.array(planet_counts)
     bs = np.array(bs)
-
+    #print planet_counts.sum(), bs.size
     assert planet_counts.sum() == bs.size
 
     stars = np.recfromcsv('stars.csv')
 
-
     ABC_model = model_def.ABC()
 
 
-
-
-
-    epsilon = 0.005
+    epsilon = 0.01
 
 
     ac_Dc, ac_Db, ac_n, ac_sig = [], [], [], []
     re_Dc, re_Db, re_n, re_sig = [], [], [], []
 
     start_catalog = time.time()
-    for n in range(N):
+    trial, accepted = 0, 0
+    while accepted <= N:
+        trial += 1
         #eventally this will take a vector of model parameters
         model = model_def.Model()
         star_header = model.star_parameters
@@ -75,8 +83,9 @@ def main():
         #Dumb sampling for now
         binom_n = stats.randint.rvs(1, 10, 1)
         scale = stats.uniform.rvs(0, 10, 1)
-        #binom_n = 5
-        #scale = 3.0
+        if len(sys.argv) == 6:
+            binom_n = 5
+            scale = 3.0  #TODO Move defaults to the model.ABC
 
         #Draw the number of planets per star.
         planet_numbers = model.planets_per_system(binom_n,
@@ -129,11 +138,13 @@ def main():
         #Let's do some ABC!
         transits = np.where((1.0 > catalog['b']) & (catalog['b'] > -1.0))
         pcount = np.bincount(catalog['ktc_kepler_id'][transits])
+
         Dc = ABC_model.distance_function(pcount[np.nonzero(pcount)],
                                          planet_counts)
         Db = ABC_model.distance_function(bs, catalog['b'][transits])
 
         if Dc <= epsilon and Db <= epsilon:
+            accepted += 1
             ac_Dc.append(Dc)
             ac_Db.append(Db)
             ac_n.append(binom_n)
@@ -146,20 +157,23 @@ def main():
 
     end_time = time.time()
     print """
+    {} trials of {} trials accepted
     Total: {}s  Catalog Gen + ABC: {}s
     Overhead: {}s  Time/Catalog: {}s
-    """.format(end_time - start, end_time - start_catalog,
-               start_catalog - start, ((end_time - start_catalog)/float(N)))
+    """.format(N, trial, end_time - start, end_time - start_catalog,
+               start_catalog - start, ((end_time - start_catalog)/float(trial)))
 
 
     f1 = plt.figure()
-    plt.plot(re_n, re_sig, 'ko',alpha=.4)
-    plt.plot(ac_n, ac_sig, 'bo',alpha=1)
+    plt.plot(re_n, re_sig, 'ko', alpha=.2)
+    plt.plot(ac_n, ac_sig, 'o', alpha=.8, mfc='c', ms=8, mec='c')
     plt.axhline(3,ls='--')
     plt.axvline(5,ls='--')
     plt.xlabel('n', fontsize=18)
     plt.ylabel('sigma', fontsize=18)
-    plt.suptitle(r'$\epsilon$ = {} n = {}'.format(epsilon,N), fontsize=18)
+    plt.suptitle(r'$\epsilon$ = {} n_acc = {}  N = {}'.format(epsilon,
+                                                              N, trial),
+                 fontsize=18)
     #plt.show()
     plt.savefig('{}.pdf'.format(sys.argv[2]))
 

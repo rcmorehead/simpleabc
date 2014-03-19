@@ -55,8 +55,47 @@ def impact_parameter(a, e, i, w, r_star):
 
 
 def inclination(fund_plane, mutual_inc, node):
+    """
+    Compute the inclination of a planet.
 
-    #TODO Docstring needed
+    Uses the law a spherical cosines to compute the sky plane of a orbit
+    given a reference plane inclination, angle from reference plane (ie mutual
+    inclination) and a nodal angle.
+
+    Parameters
+    ----------
+    fund_plane: int, float or numpy array
+        Inclination of of the fundamental plane of the system in degrees with
+        respect to the sky plane 90 degrees is edge-on.
+    mutual_inc : int, float or numpy array
+        Angle in degrees of the orbital plane of the planet with respect to the
+        fundamental plane of the system.
+    node : int, float or numpy array
+        Rotation in degrees of the planet's orbit about the perpendicular of
+        the reference plane. I.e. the longitude of the node with respect to the
+        reference plane.
+
+    Returns
+    -------
+    i : float or numpy array
+        The inclination of the planet's orbit with respect to the sky plane.
+
+
+    Examples
+    --------
+    >>> inclination(90, 3, 0)
+    87.0
+    >>> fun_i = np.linspace(80, 110, 3)
+    >>> mi = np.linspace(0, 10, 3)
+    >>> node = np.linspace(30,100,3)
+    >>> inclination(fun_i, mi, node)
+    array([  80.        ,   92.87347869,  111.41738591])
+
+    Notes
+    -----
+    See eqn. () in
+    """
+
     fund_plane = np.radians(fund_plane)
     mutual_inc = np.radians(mutual_inc)
     node = np.radians(node)

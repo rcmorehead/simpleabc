@@ -104,7 +104,7 @@ high eccentricity (&gt;&gt; 0.9), so be careful!</p>
 </div></blockquote>
 <p><strong>w</strong> : int, float or numpy array</p>
 <blockquote>
-<div><p>Longitude of acending node defines with respect to sky-plane.</p>
+<div><p>Longitude of ascending node defined with respect to sky-plane.</p>
 </div></blockquote>
 <p><strong>r_star</strong> : int, float or numpy array</p>
 <blockquote>
@@ -112,7 +112,7 @@ high eccentricity (&gt;&gt; 0.9), so be careful!</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>impact parameter</strong> : float or numpy array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>b</strong> : float or numpy array</p>
 <blockquote class="last">
 <div><p>The impact parameter, ie transit latitude in units of stellar radius.</p>
 </div></blockquote>
@@ -157,7 +157,7 @@ ISBN 978-0-8165-2945-2.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>semimajor_axis</strong> : float or numpy array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>a</strong> : float or numpy array</p>
 <blockquote class="last">
 <div><p>The semimajor axis in AU.</p>
 </div></blockquote>
@@ -185,9 +185,60 @@ ISBN 978-0-8165-2945-2.</p>
 
 <dl class="function">
 <dt id="simple_lib.transit_duration">
-<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_duration</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_duration" title="Permalink to this definition">¶</a></dt>
-<dd><p>One-line description</p>
+<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_duration</tt><big>(</big><em>p</em>, <em>a</em>, <em>e</em>, <em>i</em>, <em>w</em>, <em>b</em>, <em>r_star</em>, <em>r_planet</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the full (Q1-Q4) transit duration.</p>
 <p>Full description</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Period of planet orbit in days</p>
+</div></blockquote>
+<p><strong>a</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Semimajor axis of planet&#8217;s orbit in AU</p>
+</div></blockquote>
+<p><strong>e</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (&gt;&gt; 0.9), so be careful!</p>
+</div></blockquote>
+<p><strong>i</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Inclination of planet in degrees. 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>w</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Longitude of ascending node defined with respect to sky-plane.</p>
+</div></blockquote>
+<p><strong>b</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Impact parameter of planet.</p>
+</div></blockquote>
+<p><strong>r_star</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of star in solar radii.</p>
+</div></blockquote>
+<p><strong>r_planet</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of planet in Earth radii</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The Q1-Q4 (full) transit duration of the planet in hours.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Using Eqns. (15) and (16), Chap. 4, Page  58 of Exoplanets, edited by S.
+Seager. Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.</p>
 </dd></dl>
 
 </div>
