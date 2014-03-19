@@ -21,6 +21,11 @@ def main():
     start = time.time()
     N = int(sys.argv[4])
 
+    if len(sys.argv) == 6:
+        out = file(sys.argv[5], 'w')
+        N = 1
+
+
     #Load input stars and model
     model_def = __import__(sys.argv[2])
 
@@ -29,10 +34,10 @@ def main():
     last_star = None
     for line in file(sys.argv[3]):
         line = line.split(',')
-        if line[0] == 'kepid':
+        if line[0] == 'ktc_kepler_id':
             continue
-        if 1.0 > float(line[7]) > -1.0:
-            bs.append(float(line[7]))
+        if 1.0 > float(line[15]) > -1.0:
+            bs.append(float(line[15]))
             if last_star == line[0]:
                 planet_count += 1
             else:
@@ -47,14 +52,14 @@ def main():
 
     stars = np.recfromcsv('stars.csv')
 
-    model = model_def.Model()
 
-    star_header = model.star_parameters
-    planet_header = model.planet_parameters
+    ABC_model = model_def.ABC()
 
 
 
-    epsilon = 0.05
+
+
+    epsilon = 0.005
 
 
     ac_Dc, ac_Db, ac_n, ac_sig = [], [], [], []
@@ -62,13 +67,22 @@ def main():
 
     start_catalog = time.time()
     for n in range(N):
+        #eventally this will take a vector of model parameters
+        model = model_def.Model()
+        star_header = model.star_parameters
+        planet_header = model.planet_parameters
+
+        #Dumb sampling for now
         binom_n = stats.randint.rvs(1, 10, 1)
-        sigma = stats.uniform.rvs(0, 10, 1)
+        scale = stats.uniform.rvs(0, 10, 1)
+        #binom_n = 5
+        #scale = 3.0
 
         #Draw the number of planets per star.
         planet_numbers = model.planets_per_system(binom_n,
                                                   stars['ktc_kepler_id'].size)
 
+        total_planets = planet_numbers.sum()
 
         #Initalize synthetic catalog.
         catalog = np.zeros(planet_numbers.sum(),
@@ -79,7 +93,12 @@ def main():
 
         #Draw the random model parameters.
 
-        catalog['period'] = model.planet_period(planet_numbers.sum())
+        catalog['period'] = model.planet_period(total_planets)
+        catalog['mi'] = model.mutual_inclination(scale, total_planets)
+        catalog['fund_plane'] = model.fundamental_plane(total_planets)
+        catalog['fund_node'] = model.fundamental_node(total_planets)
+        catalog['e'] = model.eccentricity(total_planets)
+        catalog['w'] = model.longitude_ascending_node(total_planets)
 
         for h in star_header:
             catalog[h] = np.repeat(stars[h], planet_numbers)
@@ -90,10 +109,24 @@ def main():
 
         #Compute derived parameters.
         catalog['a'] = semimajor_axis(catalog['period'], catalog['mass'])
-        #catalog['b'] = impact_parameter(catalog['a'],)
-        impact_parameter()
-        ABC_model = model_def.ABC()
+        catalog['i'] = inclination(catalog['fund_plane'], catalog['mi'],
+                                   catalog['fund_node'])
+        catalog['b'] = impact_parameter(catalog['a'], catalog['e'],
+                                        catalog['i'], catalog['w'],
+                                        catalog['radius'])
 
+
+        #Save a catalog
+        if len(sys.argv) == 6:
+            np.savetxt(out, catalog, delimiter=',',
+                        fmt=['%s15']+['%10.5f']*(len(catalog.dtype.names)-1),
+                        newline='\n',
+                        header=','.join(x for x in star_header+planet_header),
+                        comments='')
+            out.close()
+
+
+        #Let's do some ABC!
         transits = np.where((1.0 > catalog['b']) & (catalog['b'] > -1.0))
         pcount = np.bincount(catalog['ktc_kepler_id'][transits])
         Dc = ABC_model.distance_function(pcount[np.nonzero(pcount)],
@@ -104,12 +137,12 @@ def main():
             ac_Dc.append(Dc)
             ac_Db.append(Db)
             ac_n.append(binom_n)
-            ac_sig.append(sigma)
+            ac_sig.append(scale)
         else:
             re_Dc.append(Dc)
             re_Db.append(Db)
             re_n.append(binom_n)
-            re_sig.append(sigma)
+            re_sig.append(scale)
 
     end_time = time.time()
     print """
@@ -122,7 +155,7 @@ def main():
     f1 = plt.figure()
     plt.plot(re_n, re_sig, 'ko',alpha=.4)
     plt.plot(ac_n, ac_sig, 'bo',alpha=1)
-    plt.axhline(2,ls='--')
+    plt.axhline(3,ls='--')
     plt.axvline(5,ls='--')
     plt.xlabel('n', fontsize=18)
     plt.ylabel('sigma', fontsize=18)

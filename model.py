@@ -16,16 +16,22 @@ class PlanetsModel(object):
                        'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
     
     planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius',
-                         'period', 'mi', 'fund_plane', 'fund_node']
+                         'period', 'mi', 'fund_plane', 'fund_node', 'e', 'w']
 
     def __init__(self):
         pass
+
+    def eccentricity(self, size):
+        return np.zeros(size)
 
     def fundamental_node(self):
         pass
 
     def fundamental_plane(self):
         pass
+
+    def longitude_ascending_node(self, size):
+        return stats.uniform.rvs(0,360,size)
 
     def mutual_inclination(self):
         pass

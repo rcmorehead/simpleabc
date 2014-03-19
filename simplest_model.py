@@ -14,14 +14,14 @@ class Model(model.PlanetsModel):
         def planet_period(self, size):
             return 10**stats.uniform.rvs(-2, 5, size=size)
 
-        def fundamental_node(self):
-            pass
+        def fundamental_node(self, size):
+            return stats.uniform.rvs(0, 360, size=size)
 
-        def fundamental_plane(self,size=size):
-            np.degrees(2*stats.uniform.rvs(0, np.pi)-1)
+        def fundamental_plane(self, size):
+            return np.degrees(2*stats.uniform.rvs(0, np.pi, size)-1)
 
         def mutual_inclination(self, scale, size):
-            stats.rayleigh.rvs(scale, size=size)
+            return stats.rayleigh.rvs(scale, size=size)
 
 
 class ABC(model.ABC):
