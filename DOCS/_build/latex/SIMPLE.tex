@@ -14,7 +14,7 @@
 
 
 \title{SIMPLE Documentation}
-\date{February 23, 2014}
+\date{March 19, 2014}
 \release{0.1.0}
 \author{Robert C. Morehead}
 \newcommand{\sphinxlogo}{}
@@ -124,100 +124,255 @@
 Contents:
 \phantomsection\label{index:module-simple_lib}\index{simple\_lib (module)}
 Useful classes and functions for SIMPLE.
-\index{Planet (class in simple\_lib)}
+\index{impact\_parameter() (in module simple\_lib)}
 
 \begin{fulllineitems}
-\phantomsection\label{index:simple_lib.Planet}\pysiglinewithargsret{\strong{class }\code{simple\_lib.}\bfcode{Planet}}{\emph{period}, \emph{mass}, \emph{radius}, \emph{a}}{}
-A container class for planet parameters.
+\phantomsection\label{index:simple_lib.impact_parameter}\pysiglinewithargsret{\code{simple\_lib.}\bfcode{impact\_parameter}}{\emph{a}, \emph{e}, \emph{i}, \emph{w}, \emph{r\_star}}{}
+Compute the impact parameter at for a transiting planet.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
-\textbf{period} : float
+\textbf{a} : int, float or numpy array
 \begin{quote}
 
-Period in days
+Semimajor axis of planet's orbit in AU
 \end{quote}
 
-\textbf{mass} : float
+\textbf{e} : int, float or numpy array
 \begin{quote}
 
-Mass in Earth masses
+Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (\textgreater{}\textgreater{} 0.9), so be careful!
 \end{quote}
 
-\textbf{radius} : float
+\textbf{i} : int, float or numpy array
 \begin{quote}
 
-Radius in Earth radii
+Inclination of planet in degrees. 90 degrees is edge-on.
 \end{quote}
 
-\textbf{a} : float
+\textbf{w} : int, float or numpy array
 \begin{quote}
 
-Semimajor axis in AU
+Longitude of ascending node defined with respect to sky-plane.
+\end{quote}
+
+\textbf{r\_star} : int, float or numpy array
+\begin{quote}
+
+Radius of star in solar radii.
 \end{quote}
 
 \item[{Returns}] \leavevmode
-\textbf{\#TODO} :
+\textbf{b} : float or numpy array
+\begin{quote}
+
+The impact parameter, ie transit latitude in units of stellar radius.
+\end{quote}
 
 \end{description}\end{quote}
-\paragraph{Attributes}
+\paragraph{Notes}
 
-\begin{tabulary}{\linewidth}{|L|L|}
-\hline
+Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.
+Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.
+\paragraph{Examples}
 
-\#TODO
- & \\
-\hline\end{tabulary}
-
-\paragraph{Methods}
-
-\begin{tabulary}{\linewidth}{|L|L|L|}
-\hline
-
-planet.set\_period(new\_period)
- & 
-float
- & 
-Set planet.period to new\_period
-\\
-
-planet.get\_period()
- & 
-none
- & 
-Return planet.period
-\\
-\hline\end{tabulary}
-
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{impact\PYGZus{}parameter}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{90}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{g+go}{1.3171077641937547e\PYGZhy{}14}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{a} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{o}{.}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mf}{1.5}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{e} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{o}{.}\PYG{l+m+mi}{9}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{i} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{89}\PYG{p}{,} \PYG{l+m+mi}{91}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{w} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{360}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{r\PYGZus{}star} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mf}{0.1}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{impact\PYGZus{}parameter}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,} \PYG{n}{e}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{w}\PYG{p}{,} \PYG{n}{r\PYGZus{}star}\PYG{p}{)}
+\PYG{g+go}{array([  3.75401300e+00,   1.66398961e\PYGZhy{}15,   1.06989371e\PYGZhy{}01])}
+\end{Verbatim}
 
 \end{fulllineitems}
 
-\index{System (class in simple\_lib)}
+\index{inclination() (in module simple\_lib)}
 
 \begin{fulllineitems}
-\phantomsection\label{index:simple_lib.System}\pysigline{\strong{class }\code{simple\_lib.}\bfcode{System}}
-A container class for system parameters.
+\phantomsection\label{index:simple_lib.inclination}\pysiglinewithargsret{\code{simple\_lib.}\bfcode{inclination}}{\emph{fund\_plane}, \emph{mutual\_inc}, \emph{node}}{}
+Compute the inclination of a planet.
+
+Uses the law a spherical cosines to compute the sky plane of a orbit
+given a reference plane inclination, angle from reference plane (ie mutual
+inclination) and a nodal angle.
 \begin{quote}\begin{description}
 \item[{Parameters}] \leavevmode
-\textbf{\#TODO} :
+\textbf{fund\_plane: int, float or numpy array} :
+\begin{quote}
 
-\textbf{Returns} :
+Inclination of of the fundamental plane of the system in degrees with
+respect to the sky plane 90 degrees is edge-on.
+\end{quote}
 
-\textbf{-------} :
+\textbf{mutual\_inc} : int, float or numpy array
+\begin{quote}
 
-\textbf{Nothing yet} :
+Angle in degrees of the orbital plane of the planet with respect to the
+fundamental plane of the system.
+\end{quote}
+
+\textbf{node} : int, float or numpy array
+\begin{quote}
+
+Rotation in degrees of the planet's orbit about the perpendicular of
+the reference plane. I.e. the longitude of the node with respect to the
+reference plane.
+\end{quote}
+
+\item[{Returns}] \leavevmode
+\textbf{i} : float or numpy array
+\begin{quote}
+
+The inclination of the planet's orbit with respect to the sky plane.
+\end{quote}
 
 \end{description}\end{quote}
-\paragraph{Methods}
+\paragraph{Notes}
 
-\begin{tabulary}{\linewidth}{|L|L|}
-\hline
+See eqn. () in
+\paragraph{Examples}
 
-System.add\_planet(planet)
- & 
-Add a simple\_lib.Planet object to the system
-\\
-\hline\end{tabulary}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{inclination}\PYG{p}{(}\PYG{l+m+mi}{90}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{)}
+\PYG{g+go}{87.0}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{fun\PYGZus{}i} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{80}\PYG{p}{,} \PYG{l+m+mi}{110}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{mi} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{10}\PYG{p}{,} \PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{node} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{30}\PYG{p}{,}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{inclination}\PYG{p}{(}\PYG{n}{fun\PYGZus{}i}\PYG{p}{,} \PYG{n}{mi}\PYG{p}{,} \PYG{n}{node}\PYG{p}{)}
+\PYG{g+go}{array([  80.        ,   92.87347869,  111.41738591])}
+\end{Verbatim}
 
+\end{fulllineitems}
+
+\index{semimajor\_axis() (in module simple\_lib)}
+
+\begin{fulllineitems}
+\phantomsection\label{index:simple_lib.semimajor_axis}\pysiglinewithargsret{\code{simple\_lib.}\bfcode{semimajor\_axis}}{\emph{period}, \emph{mass}}{}
+Compute the semimajor axis of an object.
+
+This is a simple implementation of the general form Kepler's Third law.
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{period} : int, float or numpy array
+\begin{quote}
+
+The orbital period of the orbiting body in units of days.
+\end{quote}
+
+\textbf{mass} : int, float or array-like
+\begin{quote}
+
+The mass of the central body (or mass sum) in units of solar mass.
+\end{quote}
+
+\item[{Returns}] \leavevmode
+\textbf{a} : float or numpy array
+\begin{quote}
+
+The semimajor axis in AU.
+\end{quote}
+
+\end{description}\end{quote}
+\paragraph{Examples}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{semimajor\PYGZus{}axis}\PYG{p}{(}\PYG{l+m+mf}{365.256363}\PYG{p}{,}\PYG{l+m+mf}{1.00}\PYG{p}{)}
+\PYG{g+go}{0.999985270598628}
+\end{Verbatim}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{semimajor\PYGZus{}axis}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{1000}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{)}\PYG{p}{,}\PYG{n}{np}\PYG{o}{.}\PYG{n}{linspace}\PYG{p}{(}\PYG{l+m+mf}{0.08}\PYG{p}{,} \PYG{l+m+mi}{4}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{)}\PYG{p}{)}
+\PYG{g+go}{array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])}
+\end{Verbatim}
+
+\end{fulllineitems}
+
+\index{transit\_depth() (in module simple\_lib)}
+
+\begin{fulllineitems}
+\phantomsection\label{index:simple_lib.transit_depth}\pysiglinewithargsret{\code{simple\_lib.}\bfcode{transit\_depth}}{}{}
+One-line description
+
+Full description
+
+\end{fulllineitems}
+
+\index{transit\_duration() (in module simple\_lib)}
+
+\begin{fulllineitems}
+\phantomsection\label{index:simple_lib.transit_duration}\pysiglinewithargsret{\code{simple\_lib.}\bfcode{transit\_duration}}{\emph{p}, \emph{a}, \emph{e}, \emph{i}, \emph{w}, \emph{b}, \emph{r\_star}, \emph{r\_planet}}{}
+Compute the full (Q1-Q4) transit duration.
+
+Full description
+\begin{quote}\begin{description}
+\item[{Parameters}] \leavevmode
+\textbf{p} : int, float or numpy array
+\begin{quote}
+
+Period of planet orbit in days
+\end{quote}
+
+\textbf{a} : int, float or numpy array
+\begin{quote}
+
+Semimajor axis of planet's orbit in AU
+\end{quote}
+
+\textbf{e} : int, float or numpy array
+\begin{quote}
+
+Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (\textgreater{}\textgreater{} 0.9), so be careful!
+\end{quote}
+
+\textbf{i} : int, float or numpy array
+\begin{quote}
+
+Inclination of planet in degrees. 90 degrees is edge-on.
+\end{quote}
+
+\textbf{w} : int, float or numpy array
+\begin{quote}
+
+Longitude of ascending node defined with respect to sky-plane.
+\end{quote}
+
+\textbf{b} : int, float or numpy array
+\begin{quote}
+
+Impact parameter of planet.
+\end{quote}
+
+\textbf{r\_star} : int, float or numpy array
+\begin{quote}
+
+Radius of star in solar radii.
+\end{quote}
+
+\textbf{r\_planet} : int, float or numpy array
+\begin{quote}
+
+Radius of planet in Earth radii
+\end{quote}
+
+\item[{Returns}] \leavevmode
+\textbf{T} : float or numpy array
+\begin{quote}
+
+The Q1-Q4 (full) transit duration of the planet in hours.
+\end{quote}
+
+\end{description}\end{quote}
+\paragraph{Notes}
+
+Using Eqns. (15) and (16), Chap. 4, Page  58 of Exoplanets, edited by S.
+Seager. Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.
 
 \end{fulllineitems}
 
@@ -237,12 +392,6 @@ Add a simple\_lib.Planet object to the system
 \end{itemize}
 
 
-\renewcommand{\indexname}{Python Module Index}
-\begin{theindex}
-\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
-\bigletter{s}
-\item {\texttt{simple\_lib}}, \pageref{index:module-simple_lib}
-\end{theindex}
 
 \renewcommand{\indexname}{Index}
 \printindex
