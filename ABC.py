@@ -133,6 +133,8 @@ def main():
                         header=','.join(x for x in star_header+planet_header),
                         comments='')
             out.close()
+            sys.exit('Done making synthetic catalog.')
+
 
 
         #Let's do some ABC!

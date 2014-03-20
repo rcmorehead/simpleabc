@@ -122,8 +122,47 @@
 
 </div>
 <div class="viewcode-block" id="inclination"><a class="viewcode-back" href="../simple_lib.html#simple_lib.inclination">[docs]</a><span class="k">def</span> <span class="nf">inclination</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">,</span> <span class="n">mutual_inc</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the inclination of a planet.</span>
 
-    <span class="c">#TODO Docstring needed</span>
+<span class="sd">    Uses the law a spherical cosines to compute the sky plane of a orbit</span>
+<span class="sd">    given a reference plane inclination, angle from reference plane (ie mutual</span>
+<span class="sd">    inclination) and a nodal angle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fund_plane: int, float or numpy array</span>
+<span class="sd">        Inclination of of the fundamental plane of the system in degrees with</span>
+<span class="sd">        respect to the sky plane 90 degrees is edge-on.</span>
+<span class="sd">    mutual_inc : int, float or numpy array</span>
+<span class="sd">        Angle in degrees of the orbital plane of the planet with respect to the</span>
+<span class="sd">        fundamental plane of the system.</span>
+<span class="sd">    node : int, float or numpy array</span>
+<span class="sd">        Rotation in degrees of the planet&#39;s orbit about the perpendicular of</span>
+<span class="sd">        the reference plane. I.e. the longitude of the node with respect to the</span>
+<span class="sd">        reference plane.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    i : float or numpy array</span>
+<span class="sd">        The inclination of the planet&#39;s orbit with respect to the sky plane.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; inclination(90, 3, 0)</span>
+<span class="sd">    87.0</span>
+<span class="sd">    &gt;&gt;&gt; fun_i = np.linspace(80, 110, 3)</span>
+<span class="sd">    &gt;&gt;&gt; mi = np.linspace(0, 10, 3)</span>
+<span class="sd">    &gt;&gt;&gt; node = np.linspace(30,100,3)</span>
+<span class="sd">    &gt;&gt;&gt; inclination(fun_i, mi, node)</span>
+<span class="sd">    array([  80.        ,   92.87347869,  111.41738591])</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See eqn. () in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">fund_plane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">)</span>
     <span class="n">mutual_inc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">mutual_inc</span><span class="p">)</span>
     <span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>

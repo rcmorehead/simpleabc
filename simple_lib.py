@@ -7,7 +7,6 @@ r_sun_au = 0.004649
 r_earth_r_sun = 0.009155
 day_hrs = 24.0
 
-#bob
 def impact_parameter(a, e, i, w, r_star):
     """
     Compute the impact parameter at for a transiting planet.

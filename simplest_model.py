@@ -12,7 +12,7 @@ class Model(model.PlanetsModel):
         #    return stats.norm.rvs(scale=sigma, size=n)
 
         def planet_period(self, size):
-            return 10**stats.uniform.rvs(-2, 5, size=size)
+            return 10**stats.uniform.rvs(0, 3, size=size)
 
         def fundamental_node(self, size):
             return stats.uniform.rvs(0, 360, size=size)

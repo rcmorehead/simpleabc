@@ -139,6 +139,57 @@ ISBN 978-0-8165-2945-2.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="simple_lib.inclination">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">inclination</tt><big>(</big><em>fund_plane</em>, <em>mutual_inc</em>, <em>node</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#inclination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.inclination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the inclination of a planet.</p>
+<p>Uses the law a spherical cosines to compute the sky plane of a orbit
+given a reference plane inclination, angle from reference plane (ie mutual
+inclination) and a nodal angle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fund_plane: int, float or numpy array</strong> :</p>
+<blockquote>
+<div><p>Inclination of of the fundamental plane of the system in degrees with
+respect to the sky plane 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>mutual_inc</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Angle in degrees of the orbital plane of the planet with respect to the
+fundamental plane of the system.</p>
+</div></blockquote>
+<p><strong>node</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Rotation in degrees of the planet&#8217;s orbit about the perpendicular of
+the reference plane. I.e. the longitude of the node with respect to the
+reference plane.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>i</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The inclination of the planet&#8217;s orbit with respect to the sky plane.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>See eqn. () in</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inclination</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">87.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inclination</span><span class="p">(</span><span class="n">fun_i</span><span class="p">,</span> <span class="n">mi</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+<span class="go">array([  80.        ,   92.87347869,  111.41738591])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="simple_lib.semimajor_axis">
 <tt class="descclassname">simple_lib.</tt><tt class="descname">semimajor_axis</tt><big>(</big><em>period</em>, <em>mass</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#semimajor_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.semimajor_axis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the semimajor axis of an object.</p>

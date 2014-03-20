@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  23 FEB 2014 19:28
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  19 MAR 2014 21:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -897,7 +897,7 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <17.28> not available
 
 ] (./SIMPLE.toc
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 5.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 8.
 )
 \tf@toc=\write7
 \openout7 = `SIMPLE.toc'.
@@ -916,54 +916,50 @@ File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 130.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <9> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 162.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 173.
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <9> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 181.
  [1
 
 ]
-[2
+[2] [3] [4
 
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 226.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 381.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 226.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 381.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 226.
-LaTeX Font Info:    Try loading font information for TS1+ptm on input line 228.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 381.
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 383.
 
 (/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [3] [4
-
-]
-[5
-
-
-] (./SIMPLE.ind [6
-
+) (./SIMPLE.ind
+[5] [6
 
 ] [7
 
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 249.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 249.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 398.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 398.
  (./SIMPLE.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 249.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 249.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 398.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 398.
 Package rerunfilecheck Info: File `SIMPLE.out' has not changed.
-(rerunfilecheck)             Checksum: 58A24DBAC241BD48B02EC38B19AFF600;150.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 249.
+(rerunfilecheck)             Checksum: 77D93C5DB571B947CA1141E42C02263B;95.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 398.
  ) 
 Here is how much of TeX's memory you used:
- 9070 strings out of 493315
- 126333 string characters out of 6137904
- 223070 words of memory out of 5000000
- 12251 multiletter control sequences out of 15000+600000
- 59602 words of font info for 64 fonts, out of 8000000 for 9000
+ 9074 strings out of 493315
+ 126543 string characters out of 6137904
+ 225139 words of memory out of 5000000
+ 12246 multiletter control sequences out of 15000+600000
+ 60844 words of font info for 68 fonts, out of 8000000 for 9000
  958 hyphenation exceptions out of 8191
- 36i,11n,45p,260b,397s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,11n,45p,387b,564s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2013/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2
 013/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2013/texm
@@ -973,10 +969,10 @@ type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/u
 rw/times/utmb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/u
 tmr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/times/utmri8a.pfb
 >
-Output written on SIMPLE.pdf (11 pages, 81034 bytes).
+Output written on SIMPLE.pdf (11 pages, 92978 bytes).
 PDF statistics:
- 125 PDF objects out of 1000 (max. 8388607)
- 98 compressed objects within 1 object stream
- 23 named destinations out of 1000 (max. 500000)
- 45 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 130 PDF objects out of 1000 (max. 8388607)
+ 102 compressed objects within 2 object streams
+ 28 named destinations out of 1000 (max. 500000)
+ 37 words of extra memory for PDF output out of 10000 (max. 10000000)
 
