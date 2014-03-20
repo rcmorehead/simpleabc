@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>model module &mdash; SIMPLE 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SIMPLE 0.1.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/model.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-model">
+<span id="model-module"></span><h1>model module<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h1>
+<p>Set of base classes for generating Kepler-like synthetic catalogs for
+approximate bayesian computing and various uses limited only by the user&#8217;s
+imagination.</p>
+<dl class="class">
+<dt id="model.ABC">
+<em class="property">class </em><tt class="descclassname">model.</tt><tt class="descname">ABC</tt><a class="reference internal" href="_modules/model.html#ABC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ABC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="model.ABC.abc_reduce">
+<tt class="descname">abc_reduce</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/model.html#ABC.abc_reduce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ABC.abc_reduce" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.ABC.distance_function">
+<tt class="descname">distance_function</tt><big>(</big><em>simulation</em>, <em>observed</em><big>)</big><a class="reference internal" href="_modules/model.html#ABC.distance_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.ABC.distance_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="model.NoiseModel">
+<em class="property">class </em><tt class="descclassname">model.</tt><tt class="descname">NoiseModel</tt><a class="reference internal" href="_modules/model.html#NoiseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.NoiseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="model.PlanetsModel">
+<em class="property">class </em><tt class="descclassname">model.</tt><tt class="descname">PlanetsModel</tt><a class="reference internal" href="_modules/model.html#PlanetsModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p class="rubric">Methods</p>
+<dl class="method">
+<dt id="model.PlanetsModel.eccentricity">
+<tt class="descname">eccentricity</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.eccentricity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.eccentricity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.fundamental_node">
+<tt class="descname">fundamental_node</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.fundamental_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.fundamental_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.fundamental_plane">
+<tt class="descname">fundamental_plane</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.fundamental_plane"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.fundamental_plane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.longitude_ascending_node">
+<tt class="descname">longitude_ascending_node</tt><big>(</big><em>size</em><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.longitude_ascending_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.longitude_ascending_node" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.mutual_inclination">
+<tt class="descname">mutual_inclination</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.mutual_inclination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.mutual_inclination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.planet_inclination">
+<tt class="descname">planet_inclination</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.planet_inclination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.planet_inclination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.planet_mass">
+<tt class="descname">planet_mass</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.planet_mass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.planet_mass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.PlanetsModel.planet_parameters">
+<tt class="descname">planet_parameters</tt><em class="property"> = ['b', 'i', 'a', 'planet_mass', 'planet_radius', 'period', 'mi', 'fund_plane', 'fund_node', 'e', 'w']</em><a class="headerlink" href="#model.PlanetsModel.planet_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.planet_period">
+<tt class="descname">planet_period</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.planet_period"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.planet_period" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.planet_radius">
+<tt class="descname">planet_radius</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.planet_radius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.planet_radius" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="model.PlanetsModel.planets_per_system">
+<tt class="descname">planets_per_system</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/model.html#PlanetsModel.planets_per_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#model.PlanetsModel.planets_per_system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="model.PlanetsModel.star_parameters">
+<tt class="descname">star_parameters</tt><em class="property"> = ['ktc_kepler_id', 'teff', 'teff_err1', 'logg', 'feh', 'feh_err1', 'mass', 'mass_err1', 'radius', 'radius_err1', 'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']</em><a class="headerlink" href="#model.PlanetsModel.star_parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Robert C. Morehead.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
