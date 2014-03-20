@@ -15,7 +15,7 @@ from scipy import stats
 import pylab as plt
 from simple_lib import *
 
-#@profile
+@profile
 # noinspection PyNoneFunctionAssignment
 def main():
     start = time.time()
