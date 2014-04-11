@@ -178,9 +178,10 @@ def main():
         #ABC_model = model_def.ABC()
 
     #Start a pool of workers
-    pool = Pool(cpu_count())
+    N_procs = cpu_count()
+    pool = Pool(N_procs)
 
-    trials = pool.map(part_iteration, trial, chunksize=250)
+    trials = pool.map(part_iteration, trial)
 
     #Shut down pool
     pool.close()
@@ -201,10 +202,11 @@ def main():
 
 
     print """
+    Ran on {} Processors
     {} trials of {} trials accepted
     Total: {}s  Catalog Gen + ABC: {}s
     Overhead: {}s  Time/Catalog: {}s
-    """.format(ac_n.size, trial.size, end_time - start, end_time - start_catalog,
+    """.format(N_procs,ac_n.size, trial.size, end_time - start, end_time - start_catalog,
                start_catalog - start, ((end_time - start_catalog)/float(
                                                                 trial.size)))
 
