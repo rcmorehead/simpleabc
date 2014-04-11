@@ -3,6 +3,8 @@ Useful classes and functions for SIMPLE.
 """
 import numpy as np
 
+#Constants
+#TODO Is there a better system for constants?
 r_sun_au = 0.004649
 r_earth_r_sun = 0.009155
 day_hrs = 24.0
