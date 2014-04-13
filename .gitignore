@@ -36,3 +36,16 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+
+#Latex files
+*.pdf
+*.bbl
+*.aux
+*.log
+*Notes.bib
+*.fls
+*.fdb
+*.fdb_latexmk
+*.blg
+master.bib
