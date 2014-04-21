@@ -1,72 +1,63 @@
-'''
-Set of base classes for generating Kepler-like synthetic catalogs for
-approximate bayesian computing and various uses limited only by the user's
-imagination.
-'''
+"""
+Base class for constructing models for approximate bayesian computing
+and various uses limited only by the user's imagination.
+
+WARNING!! Not meant for direct use! You must implement your own model as a
+subclass and override the all following methods:
+
+* Model.draw_theta
+* Model.generate_data
+* Model.summary_stats
+* Model.distance_function
+
+"""
 
 
-from scipy import stats
-import numpy as np
+class Model(object):
 
-class PlanetsModel(object):
+    def draw_theta(self):
+        """
+        Sub-classable method for drawing from a prior distribution.
 
+        This method should return an array-like iterable that is a vector of
+        proposed model parameters from your prior distribution.
+        """
 
-    star_parameters = ['ktc_kepler_id', 'teff', 'teff_err1', 'logg', 'feh',
-                       'feh_err1', 'mass', 'mass_err1', 'radius', 'radius_err1',
-                       'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
-    
-    planet_parameters = ['b', 'i', 'a', 'planet_mass', 'planet_radius',
-                         'period', 'mi', 'fund_plane', 'fund_node', 'e', 'w']
+        raise NotImplementedError('You must override the draw_theta '
+                                  'method in your own subclass.')
 
-    def __init__(self):
-        pass
+    def generate_data(self, theta):
+        """
+        Sub-classable method for generating synthetic data sets from forward
+        model.
 
-    def eccentricity(self, size):
-        return np.zeros(size)
+        This method should return an array/matrix/table of simulated data
+        taking vector theta as an argument.
+        """
 
-    def fundamental_node(self):
-        pass
+        raise NotImplementedError('You must override the generate_data '
+                                  'method in your own subclass.')
 
-    def fundamental_plane(self):
-        pass
+    def summary_stats(self, data):
+        """
+        Sub-classable method for computing summary statistics.
 
-    def longitude_ascending_node(self, size):
-        return stats.uniform.rvs(0,360,size)
+        This method should return an array-like iterable of summary statistics
+        taking an array/matrix/table as an argument.
+        """
 
-    def mutual_inclination(self):
-        pass
+        raise NotImplementedError('You must override the summary_stats '
+                                  'method in your own subclass.')
 
-    def planet_inclination(self):
-        pass
+    def distance_function(self, summary_stats, summary_stats_synth):
+        """
+        Sub-classable method for computing a distance function.
 
-    def planet_mass(self):
-        pass
+        This method should return a distance D of for comparing to the
+        acceptance tolerance (epsilon) taking two array-like iterables of
+        summary statistics as an argument (nominally the observed summary
+        statistics and .
+        """
 
-    def planet_period(self):
-        pass
-
-    def planet_radius(self):
-        pass
-
-    def planets_per_system(self):
-        pass
-
-
-class NoiseModel(object):
-
-    def __init__(self):
-        pass
-
-
-class ABC(object):
-
-    def __init__(self):
-        pass
-
-    def abc_reduce(self, data):
-        pass
-
-    def distance_function(self, simulation, observed):
-        pass
-
-
+        raise NotImplementedError('You must override the distance_function '
+                                  'method in your own subclass.')
