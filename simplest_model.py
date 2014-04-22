@@ -5,8 +5,14 @@ from simple_lib import *
 
 class MyModel(model.Model):
 
-        def __init__(self, stars):
+        def __init__(self, stars, data):
             self.stars = stars
+            self.data = data
+            self.data_sum_stats = self.summary_stats(self.data)
+
+        def __call__(self, theta):
+            return self.generate_data_and_reduce(theta)
+
 
         def draw_theta(self):
             binom_n = stats.randint.rvs(1, 10, 1)
@@ -24,7 +30,7 @@ class MyModel(model.Model):
 
             star_header = ['ktc_kepler_id', 'teff', 'teff_err1', 'logg', 'feh',
                        'feh_err1', 'mass', 'mass_err1', 'radius', 'radius_err1',
-                       'CDPP3', 'CDPP6', 'CDPP12', 'kepmag', 'days_obs']
+                       'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
 
             planet_header = ['b', 'i', 'a', 'planet_mass', 'planet_radius',
                          'period', 'mi', 'fund_plane', 'fund_node', 'e', 'w']
@@ -77,6 +83,18 @@ class MyModel(model.Model):
             ksd_sc = stats.ks_2samp(summary_stats[1], summary_stats_synth[1])[0]
 
             return np.sqrt(ksd_bi**2+ksd_sc**2)
+
+        def generate_data_and_reduce(self, theta):
+            """
+            Combined generate_data and summary_stats for efficient
+            parallelization
+            """
+            print "I got this far"
+            synth = self.generate_data(theta)
+            sum_stats = self.summary_stats(synth)
+            D = self.distance_function(sum_stats, self.data_sum_stats)
+
+            return theta, D
 
         def planets_per_system(self, n, size):
             return stats.binom.rvs(n, .5, size=size)
