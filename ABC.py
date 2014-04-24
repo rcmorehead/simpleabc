@@ -4,10 +4,10 @@ Module for Approximate Bayesian Computation
 """
 
 import multiprocessing
-import numpy as np
+#import numpy as np
 
 def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
-              parallel=False):
+              parallel=False, n_procs='all'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model.
@@ -23,14 +23,17 @@ def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
 
     if parallel:
         attempts = 2*min_particles
+        if n_procs == 'all':
+            n_procs = multiprocessing.cpu_count()
         while accepted_count < min_particles:
             thetas = [model.draw_theta() for x in
                                xrange(attempts)]
 
             #Start a pool of workers
-            N_procs = multiprocessing.cpu_count()
 
-            pool = multiprocessing.Pool(N_procs)
+
+
+            pool = multiprocessing.Pool(n_procs)
             ds = pool.map(model, thetas)
 
             #Shut down pool
@@ -70,3 +73,8 @@ def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
                 rejected.append(theta)
 
         return posterior, rejected, accepted_count, trial_count
+
+
+def pmc_abc():
+    raise NotImplementedError('This algorithm coming soon!')
+
