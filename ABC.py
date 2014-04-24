@@ -4,7 +4,7 @@ Module for Approximate Bayesian Computation
 """
 
 import multiprocessing
-
+import numpy as np
 
 def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
               parallel=False):
@@ -22,26 +22,34 @@ def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
     data_summary_stats = model.summary_stats(data)
 
     if parallel:
-        number_of_particles = min_particles * 2
+        attempts = 2*min_particles
         while accepted_count < min_particles:
-            thetas = [model.draw_theta() for x in xrange(number_of_particles)]
-            print thetas
+            thetas = [model.draw_theta() for x in
+                               xrange(attempts)]
+
             #Start a pool of workers
             N_procs = multiprocessing.cpu_count()
-            print N_procs
-            N_procs = 1
-            pool = multiprocessing.Pool(N_procs)
 
-            sum_stats = pool.map(model, thetas)
+            pool = multiprocessing.Pool(N_procs)
+            ds = pool.map(model, thetas)
 
             #Shut down pool
             pool.close()
             pool.join()
 
-            print sum_stats
-            accepted_count = min_particles
+            for j, d in enumerate(ds):
+                if d < epsilon:
+                    posterior.append(thetas[j])
+                    accepted_count += 1
+                    trial_count += 1
+                else:
+                    rejected.append(thetas[j])
+                    trial_count += 1
 
-        return 'This ', 'Just ', 'Worked ', 'Yo'
+            attempts = int(float(trial_count)/float(accepted_count + 1) *
+                        (min_particles - accepted_count))
+
+        return posterior, rejected, accepted_count, trial_count
     else:
         while accepted_count <= min_particles:
 

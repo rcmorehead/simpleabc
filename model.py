@@ -15,6 +15,24 @@ subclass and override the all following methods:
 
 class Model(object):
 
+    def __call__(self, theta):
+        return self.generate_data_and_reduce(theta)
+
+    def set_data(self, data):
+            self.data = data
+            self.data_sum_stats = self.summary_stats(self.data)
+
+    def generate_data_and_reduce(self, theta):
+        """
+        A combined method for generating data, calculating summary statistics
+        and evaluating the distance function all at once.
+        """
+        synth = self.generate_data(theta)
+        sum_stats = self.summary_stats(synth)
+        d = self.distance_function(sum_stats, self.data_sum_stats)
+
+        return d
+
     def draw_theta(self):
         """
         Sub-classable method for drawing from a prior distribution.
