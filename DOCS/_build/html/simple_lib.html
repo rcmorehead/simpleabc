@@ -1,0 +1,309 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simple_lib module &mdash; SIMPLE 0.1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SIMPLE 0.1.2 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/simple_lib.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-simple_lib">
+<span id="simple-lib-module"></span><h1>simple_lib module<a class="headerlink" href="#module-simple_lib" title="Permalink to this headline">¶</a></h1>
+<p>Useful classes and functions for SIMPLE.</p>
+<dl class="function">
+<dt id="simple_lib.impact_parameter">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">impact_parameter</tt><big>(</big><em>a</em>, <em>e</em>, <em>i</em>, <em>w</em>, <em>r_star</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#impact_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.impact_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the impact parameter at for a transiting planet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Semimajor axis of planet&#8217;s orbit in AU</p>
+</div></blockquote>
+<p><strong>e</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (&gt;&gt; 0.9), so be careful!</p>
+</div></blockquote>
+<p><strong>i</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Inclination of planet in degrees. 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>w</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Longitude of ascending node defined with respect to sky-plane.</p>
+</div></blockquote>
+<p><strong>r_star</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of star in solar radii.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>b</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The impact parameter, ie transit latitude in units of stellar radius.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.
+Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">impact_parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">1.3171077641937547e-14</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">.</span><span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">89</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r_star</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">impact_parameter</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">r_star</span><span class="p">)</span>
+<span class="go">array([  3.75401300e+00,   1.66398961e-15,   1.06989371e-01])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.inclination">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">inclination</tt><big>(</big><em>fund_plane</em>, <em>mutual_inc</em>, <em>node</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#inclination"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.inclination" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the inclination of a planet.</p>
+<p>Uses the law a spherical cosines to compute the sky plane of a orbit
+given a reference plane inclination, angle from reference plane (ie mutual
+inclination) and a nodal angle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fund_plane: int, float or numpy array</strong> :</p>
+<blockquote>
+<div><p>Inclination of of the fundamental plane of the system in degrees with
+respect to the sky plane 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>mutual_inc</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Angle in degrees of the orbital plane of the planet with respect to the
+fundamental plane of the system.</p>
+</div></blockquote>
+<p><strong>node</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Rotation in degrees of the planet&#8217;s orbit about the perpendicular of
+the reference plane. I.e. the longitude of the node with respect to the
+reference plane.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>i</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The inclination of the planet&#8217;s orbit with respect to the sky plane.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>See eqn. () in</p>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inclination</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">87.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fun_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inclination</span><span class="p">(</span><span class="n">fun_i</span><span class="p">,</span> <span class="n">mi</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+<span class="go">array([  80.        ,   92.87347869,  111.41738591])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.semimajor_axis">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">semimajor_axis</tt><big>(</big><em>period</em>, <em>mass</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#semimajor_axis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.semimajor_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the semimajor axis of an object.</p>
+<p>This is a simple implementation of the general form Kepler&#8217;s Third law.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>period</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>The orbital period of the orbiting body in units of days.</p>
+</div></blockquote>
+<p><strong>mass</strong> : int, float or array-like</p>
+<blockquote>
+<div><p>The mass of the central body (or mass sum) in units of solar mass.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>a</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The semimajor axis in AU.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">semimajor_axis</span><span class="p">(</span><span class="mf">365.256363</span><span class="p">,</span><span class="mf">1.00</span><span class="p">)</span>
+<span class="go">0.999985270598628</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">semimajor_axis</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.08</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="go">array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.transit_depth">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_depth</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_depth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>One-line description</p>
+<p>Full description</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simple_lib.transit_duration">
+<tt class="descclassname">simple_lib.</tt><tt class="descname">transit_duration</tt><big>(</big><em>p</em>, <em>a</em>, <em>e</em>, <em>i</em>, <em>w</em>, <em>b</em>, <em>r_star</em>, <em>r_planet</em><big>)</big><a class="reference internal" href="_modules/simple_lib.html#transit_duration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simple_lib.transit_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the full (Q1-Q4) transit duration.</p>
+<p>Full description</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>p</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Period of planet orbit in days</p>
+</div></blockquote>
+<p><strong>a</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Semimajor axis of planet&#8217;s orbit in AU</p>
+</div></blockquote>
+<p><strong>e</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Eccentricity of planet. WARNING! This function breaks down at
+high eccentricity (&gt;&gt; 0.9), so be careful!</p>
+</div></blockquote>
+<p><strong>i</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Inclination of planet in degrees. 90 degrees is edge-on.</p>
+</div></blockquote>
+<p><strong>w</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Longitude of ascending node defined with respect to sky-plane.</p>
+</div></blockquote>
+<p><strong>b</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Impact parameter of planet.</p>
+</div></blockquote>
+<p><strong>r_star</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of star in solar radii.</p>
+</div></blockquote>
+<p><strong>r_planet</strong> : int, float or numpy array</p>
+<blockquote>
+<div><p>Radius of planet in Earth radii</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>T</strong> : float or numpy array</p>
+<blockquote class="last">
+<div><p>The Q1-Q4 (full) transit duration of the planet in hours.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Using Eqns. (15) and (16), Chap. 4, Page  58 of Exoplanets, edited by S.
+Seager. Tucson, AZ: University of Arizona Press, 2011, 526 pp.
+ISBN 978-0-8165-2945-2.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Robert C. Morehead.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

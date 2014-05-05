@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>simple_lib &mdash; SIMPLE 0.1.2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="SIMPLE 0.1.2 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for simple_lib</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Useful classes and functions for SIMPLE.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">r_sun_au</span> <span class="o">=</span> <span class="mf">0.004649</span>
+<span class="n">r_earth_r_sun</span> <span class="o">=</span> <span class="mf">0.009155</span>
+<span class="n">day_hrs</span> <span class="o">=</span> <span class="mf">24.0</span>
+
+<div class="viewcode-block" id="impact_parameter"><a class="viewcode-back" href="../simple_lib.html#simple_lib.impact_parameter">[docs]</a><span class="k">def</span> <span class="nf">impact_parameter</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">r_star</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the impact parameter at for a transiting planet.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : int, float or numpy array</span>
+<span class="sd">        Semimajor axis of planet&#39;s orbit in AU</span>
+<span class="sd">    e : int, float or numpy array</span>
+<span class="sd">        Eccentricity of planet. WARNING! This function breaks down at</span>
+<span class="sd">        high eccentricity (&gt;&gt; 0.9), so be careful!</span>
+<span class="sd">    i : int, float or numpy array</span>
+<span class="sd">        Inclination of planet in degrees. 90 degrees is edge-on.</span>
+<span class="sd">    w : int, float or numpy array</span>
+<span class="sd">        Longitude of ascending node defined with respect to sky-plane.</span>
+<span class="sd">    r_star : int, float or numpy array</span>
+<span class="sd">        Radius of star in solar radii.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    b : float or numpy array</span>
+<span class="sd">        The impact parameter, ie transit latitude in units of stellar radius.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; impact_parameter(1, 0, 90, 0, 1)</span>
+<span class="sd">    1.3171077641937547e-14</span>
+<span class="sd">    &gt;&gt;&gt; a = np.linspace(.1, 1.5, 3)</span>
+<span class="sd">    &gt;&gt;&gt; e = np.linspace(0, .9, 3)</span>
+<span class="sd">    &gt;&gt;&gt; i = np.linspace(89, 91, 3)</span>
+<span class="sd">    &gt;&gt;&gt; w = np.linspace(0, 360, 3)</span>
+<span class="sd">    &gt;&gt;&gt; r_star = np.linspace(0.1, 10, 3)</span>
+<span class="sd">    &gt;&gt;&gt; impact_parameter(a, e, i, w, r_star)</span>
+<span class="sd">    array([  3.75401300e+00,   1.66398961e-15,   1.06989371e-01])</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Using Eqn. (7), Chap. 4, Page  56 of Exoplanets, edited by S. Seager.</span>
+<span class="sd">    Tucson, AZ: University of Arizona Press, 2011, 526 pp.</span>
+<span class="sd">    ISBN 978-0-8165-2945-2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">r_star</span> <span class="o">*</span> <span class="n">r_sun_au</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">*</span>
+              <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">w</span><span class="p">))))</span>
+
+</div>
+<div class="viewcode-block" id="inclination"><a class="viewcode-back" href="../simple_lib.html#simple_lib.inclination">[docs]</a><span class="k">def</span> <span class="nf">inclination</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">,</span> <span class="n">mutual_inc</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the inclination of a planet.</span>
+
+<span class="sd">    Uses the law a spherical cosines to compute the sky plane of a orbit</span>
+<span class="sd">    given a reference plane inclination, angle from reference plane (ie mutual</span>
+<span class="sd">    inclination) and a nodal angle.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fund_plane: int, float or numpy array</span>
+<span class="sd">        Inclination of of the fundamental plane of the system in degrees with</span>
+<span class="sd">        respect to the sky plane 90 degrees is edge-on.</span>
+<span class="sd">    mutual_inc : int, float or numpy array</span>
+<span class="sd">        Angle in degrees of the orbital plane of the planet with respect to the</span>
+<span class="sd">        fundamental plane of the system.</span>
+<span class="sd">    node : int, float or numpy array</span>
+<span class="sd">        Rotation in degrees of the planet&#39;s orbit about the perpendicular of</span>
+<span class="sd">        the reference plane. I.e. the longitude of the node with respect to the</span>
+<span class="sd">        reference plane.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    i : float or numpy array</span>
+<span class="sd">        The inclination of the planet&#39;s orbit with respect to the sky plane.</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; inclination(90, 3, 0)</span>
+<span class="sd">    87.0</span>
+<span class="sd">    &gt;&gt;&gt; fun_i = np.linspace(80, 110, 3)</span>
+<span class="sd">    &gt;&gt;&gt; mi = np.linspace(0, 10, 3)</span>
+<span class="sd">    &gt;&gt;&gt; node = np.linspace(30,100,3)</span>
+<span class="sd">    &gt;&gt;&gt; inclination(fun_i, mi, node)</span>
+<span class="sd">    array([  80.        ,   92.87347869,  111.41738591])</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    See eqn. () in</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fund_plane</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">)</span>
+    <span class="n">mutual_inc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">mutual_inc</span><span class="p">)</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">mutual_inc</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">fund_plane</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">mutual_inc</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">node</span><span class="p">)))</span>
+
+
+</div>
+<div class="viewcode-block" id="semimajor_axis"><a class="viewcode-back" href="../simple_lib.html#simple_lib.semimajor_axis">[docs]</a><span class="k">def</span> <span class="nf">semimajor_axis</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">mass</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the semimajor axis of an object.</span>
+
+<span class="sd">    This is a simple implementation of the general form Kepler&#39;s Third law.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    period : int, float or numpy array</span>
+<span class="sd">        The orbital period of the orbiting body in units of days.</span>
+<span class="sd">    mass : int, float or array-like</span>
+<span class="sd">        The mass of the central body (or mass sum) in units of solar mass.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    a : float or numpy array</span>
+<span class="sd">        The semimajor axis in AU.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; semimajor_axis(365.256363,1.00)</span>
+<span class="sd">    0.999985270598628</span>
+
+<span class="sd">    &gt;&gt;&gt; semimajor_axis(np.linspace(1, 1000, 5),np.linspace(0.08, 4, 5))</span>
+<span class="sd">    array([ 0.00843254,  0.7934587 ,  1.56461631,  2.33561574,  3.10657426])</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(((</span><span class="mf">2.959E-4</span><span class="o">*</span><span class="n">mass</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">period</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="transit_depth"><a class="viewcode-back" href="../simple_lib.html#simple_lib.transit_depth">[docs]</a><span class="k">def</span> <span class="nf">transit_depth</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    One-line description</span>
+
+<span class="sd">    Full description</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="transit_duration"><a class="viewcode-back" href="../simple_lib.html#simple_lib.transit_duration">[docs]</a><span class="k">def</span> <span class="nf">transit_duration</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">r_star</span><span class="p">,</span> <span class="n">r_planet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the full (Q1-Q4) transit duration.</span>
+
+<span class="sd">    Full description</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    p : int, float or numpy array</span>
+<span class="sd">        Period of planet orbit in days</span>
+<span class="sd">    a : int, float or numpy array</span>
+<span class="sd">        Semimajor axis of planet&#39;s orbit in AU</span>
+<span class="sd">    e : int, float or numpy array</span>
+<span class="sd">        Eccentricity of planet. WARNING! This function breaks down at</span>
+<span class="sd">        high eccentricity (&gt;&gt; 0.9), so be careful!</span>
+<span class="sd">    i : int, float or numpy array</span>
+<span class="sd">        Inclination of planet in degrees. 90 degrees is edge-on.</span>
+<span class="sd">    w : int, float or numpy array</span>
+<span class="sd">        Longitude of ascending node defined with respect to sky-plane.</span>
+<span class="sd">    b : int, float or numpy array</span>
+<span class="sd">        Impact parameter of planet.</span>
+<span class="sd">    r_star : int, float or numpy array</span>
+<span class="sd">        Radius of star in solar radii.</span>
+<span class="sd">    r_planet : int, float or numpy array</span>
+<span class="sd">        Radius of planet in Earth radii</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    T : float or numpy array</span>
+<span class="sd">        The Q1-Q4 (full) transit duration of the planet in hours.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Using Eqns. (15) and (16), Chap. 4, Page  58 of Exoplanets, edited by S.</span>
+<span class="sd">    Seager. Tucson, AZ: University of Arizona Press, 2011, 526 pp.</span>
+<span class="sd">    ISBN 978-0-8165-2945-2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c">#TODO Make this robust against b &gt; 1</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">((</span><span class="n">r_star</span> <span class="o">*</span> <span class="n">r_sun_au</span><span class="p">)</span> <span class="o">/</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">*</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">r_planet</span> <span class="o">*</span> <span class="n">r_earth_r_sun</span><span class="p">)</span> <span class="o">/</span> <span class="n">r_star</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+                              <span class="o">-</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span>
+            <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">day_hrs</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Robert C. Morehead.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+\select@language {english}
+\contentsline {paragraph}{Notes}{1}{paragraph*.5}
+\contentsline {paragraph}{Examples}{1}{paragraph*.6}
+\contentsline {paragraph}{Notes}{2}{paragraph*.8}
+\contentsline {paragraph}{Examples}{2}{paragraph*.9}
+\contentsline {paragraph}{Examples}{2}{paragraph*.11}
+\contentsline {paragraph}{Notes}{3}{paragraph*.14}
+\contentsline {chapter}{\numberline {1}Indices and tables}{5}{chapter.1}
+\contentsline {chapter}{Index}{7}{section*.15}

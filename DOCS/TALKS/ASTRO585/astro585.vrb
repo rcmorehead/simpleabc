@@ -1,0 +1,38 @@
+\frametitle{I took an object-oriented approach using Python.}
+\tiny
+\begin{minted}[linenos=true]{python}
+class Model(object):
+
+    def __call__(self, theta):
+        return self.generate_data_and_reduce(theta)
+
+    def set_data(self, data):
+            self.data = data
+            self.data_sum_stats = self.summary_stats(self.data)
+
+    def generate_data_and_reduce(self, theta):
+        """
+        A combined method for generating data, calculating summary statistics
+        and evaluating the distance function all at once.
+        """
+        synth = self.generate_data(theta)
+        sum_stats = self.summary_stats(synth)
+        d = self.distance_function(sum_stats, self.data_sum_stats)
+        return d
+
+    def draw_theta(self):
+        raise NotImplementedError('You must override the draw_theta '
+                                  'method in your own subclass.')
+
+    def generate_data(self, theta):
+        raise NotImplementedError('You must override the generate_data '
+                                  'method in your own subclass.')
+
+    def summary_stats(self, data):
+        raise NotImplementedError('You must override the summary_stats '
+                                  'method in your own subclass.')
+
+    def distance_function(self, summary_stats, summary_stats_synth):
+        raise NotImplementedError('You must override the distance_function '
+                                  'method in your own subclass.')
+\end{minted}

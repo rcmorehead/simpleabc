@@ -1,0 +1,12 @@
+\begin{thebibliography}{2}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{{Fang} \& {Margot}(2012)}]{Fang:2012}
+{Fang}, J., \& {Margot}, J.-L. 2012, \apj, 761, 92
+
+\bibitem[{Sunn{\aa}ker {et~al.}(2013)Sunn{\aa}ker, Busetto, Numminen, Corander,
+  Foll, \& Dessimoz}]{Sunnaker:2013}
+Sunn{\aa}ker, M., Busetto, A.~G., Numminen, E., Corander, J., Foll, M., \&
+  Dessimoz, C. 2013, PLoS Comput Biol, 9, e1002803
+
+\end{thebibliography}

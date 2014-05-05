@@ -1,0 +1,18 @@
+\begin{theindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter I
+  \item impact\_parameter() (in module simple\_lib), \hyperpage{1}
+  \item inclination() (in module simple\_lib), \hyperpage{1}
+
+  \indexspace
+  \bigletter S
+  \item semimajor\_axis() (in module simple\_lib), \hyperpage{2}
+  \item simple\_lib (module), \hyperpage{1}
+
+  \indexspace
+  \bigletter T
+  \item transit\_depth() (in module simple\_lib), \hyperpage{2}
+  \item transit\_duration() (in module simple\_lib), \hyperpage{2}
+
+\end{theindex}
