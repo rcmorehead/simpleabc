@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>simplest_model &mdash; SIMPLE 0.1.1 documentation</title>
+    <title>simplest_model &mdash; SIMPLE 0.1.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="SIMPLE 0.1.1 documentation" href="../index.html" />
+    <link rel="top" title="SIMPLE 0.1.2 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
@@ -72,8 +72,10 @@
 
 <div class="viewcode-block" id="MyModel"><a class="viewcode-back" href="../simplest_model.html#simplest_model.MyModel">[docs]</a><span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 
-        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stars</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stars</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stars</span> <span class="o">=</span> <span class="n">stars</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_sum_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MyModel.draw_theta"><a class="viewcode-back" href="../simplest_model.html#simplest_model.MyModel.draw_theta">[docs]</a>        <span class="k">def</span> <span class="nf">draw_theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="n">binom_n</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">randint</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -91,17 +93,17 @@
 
             <span class="n">star_header</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ktc_kepler_id&#39;</span><span class="p">,</span> <span class="s">&#39;teff&#39;</span><span class="p">,</span> <span class="s">&#39;teff_err1&#39;</span><span class="p">,</span> <span class="s">&#39;logg&#39;</span><span class="p">,</span> <span class="s">&#39;feh&#39;</span><span class="p">,</span>
                        <span class="s">&#39;feh_err1&#39;</span><span class="p">,</span> <span class="s">&#39;mass&#39;</span><span class="p">,</span> <span class="s">&#39;mass_err1&#39;</span><span class="p">,</span> <span class="s">&#39;radius&#39;</span><span class="p">,</span> <span class="s">&#39;radius_err1&#39;</span><span class="p">,</span>
-                       <span class="s">&#39;CDPP3&#39;</span><span class="p">,</span> <span class="s">&#39;CDPP6&#39;</span><span class="p">,</span> <span class="s">&#39;CDPP12&#39;</span><span class="p">,</span> <span class="s">&#39;kepmag&#39;</span><span class="p">,</span> <span class="s">&#39;days_obs&#39;</span><span class="p">]</span>
+                       <span class="s">&#39;cdpp3&#39;</span><span class="p">,</span> <span class="s">&#39;cdpp6&#39;</span><span class="p">,</span> <span class="s">&#39;cdpp12&#39;</span><span class="p">,</span> <span class="s">&#39;kepmag&#39;</span><span class="p">,</span> <span class="s">&#39;days_obs&#39;</span><span class="p">]</span>
 
             <span class="n">planet_header</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;planet_mass&#39;</span><span class="p">,</span> <span class="s">&#39;planet_radius&#39;</span><span class="p">,</span>
                          <span class="s">&#39;period&#39;</span><span class="p">,</span> <span class="s">&#39;mi&#39;</span><span class="p">,</span> <span class="s">&#39;fund_plane&#39;</span><span class="p">,</span> <span class="s">&#39;fund_node&#39;</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">]</span>
 
             <span class="c">#Initalize synthetic catalog.</span>
             <span class="n">catalog</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">planet_numbers</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>
-                           <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;names&#39;</span><span class="p">:</span> <span class="n">star_header</span> <span class="o">+</span> <span class="n">planet_header</span><span class="p">,</span>
-                                  <span class="s">&#39;formats&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s">&#39;i8&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;f8&#39;</span><span class="p">]</span> <span class="o">*</span>
-                                              <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">star_header</span> <span class="o">+</span> <span class="n">planet_header</span><span class="p">)</span>
-                                               <span class="o">-</span> <span class="mi">1</span><span class="p">))})</span>
+                                <span class="n">dtype</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;names&#39;</span><span class="p">:</span> <span class="n">star_header</span> <span class="o">+</span> <span class="n">planet_header</span><span class="p">,</span>
+                                <span class="s">&#39;formats&#39;</span><span class="p">:</span> <span class="p">([</span><span class="s">&#39;i8&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s">&#39;f8&#39;</span><span class="p">]</span> <span class="o">*</span>
+                                            <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">star_header</span> <span class="o">+</span> <span class="n">planet_header</span><span class="p">)</span>
+                                            <span class="o">-</span> <span class="mi">1</span><span class="p">))})</span>
 
             <span class="c">#Draw the random model parameters.</span>
 
@@ -181,7 +183,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

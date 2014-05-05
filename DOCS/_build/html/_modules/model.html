@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>model &mdash; SIMPLE 0.1.1 documentation</title>
+    <title>model &mdash; SIMPLE 0.1.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="SIMPLE 0.1.1 documentation" href="../index.html" />
+    <link rel="top" title="SIMPLE 0.1.2 documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
@@ -82,6 +82,24 @@
 
 <div class="viewcode-block" id="Model"><a class="viewcode-back" href="../model.html#model.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_data_and_reduce</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Model.set_data"><a class="viewcode-back" href="../model.html#model.Model.set_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_sum_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_stats</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Model.generate_data_and_reduce"><a class="viewcode-back" href="../model.html#model.Model.generate_data_and_reduce">[docs]</a>    <span class="k">def</span> <span class="nf">generate_data_and_reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A combined method for generating data, calculating summary statistics</span>
+<span class="sd">        and evaluating the distance function all at once.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">synth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_data</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">sum_stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">summary_stats</span><span class="p">(</span><span class="n">synth</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distance_function</span><span class="p">(</span><span class="n">sum_stats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_sum_stats</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">d</span>
+</div>
 <div class="viewcode-block" id="Model.draw_theta"><a class="viewcode-back" href="../model.html#model.Model.draw_theta">[docs]</a>    <span class="k">def</span> <span class="nf">draw_theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sub-classable method for drawing from a prior distribution.</span>
@@ -144,7 +162,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li>
+        <li><a href="../index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li>
           <li><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ABC module &mdash; SIMPLE 0.1.1 documentation</title>
+    <title>ABC module &mdash; SIMPLE 0.1.2 documentation</title>
     
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1.1',
+        VERSION:     '0.1.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="SIMPLE 0.1.1 documentation" href="index.html" /> 
+    <link rel="top" title="SIMPLE 0.1.2 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -36,19 +36,11 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">ABC module</a><ul>
-<li><a class="reference internal" href="#usage">Usage</a></li>
-</ul>
-</li>
-</ul>
-
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/ABC.txt"
@@ -78,18 +70,18 @@
   <div class="section" id="module-ABC">
 <span id="abc-module"></span><h1>ABC module<a class="headerlink" href="#module-ABC" title="Permalink to this headline">¶</a></h1>
 <p>Module for Approximate Bayesian Computation</p>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<blockquote>
-<div>ABC.py &lt;file containing stars&gt; &lt;model.py&gt; &lt;observed&gt;</div></blockquote>
 <dl class="function">
-<dt id="ABC.abc">
-<tt class="descclassname">ABC.</tt><tt class="descname">abc</tt><big>(</big><em>model</em>, <em>data</em>, <em>target_epsilon=0.1</em>, <em>min_particles=10</em>, <em>parallel=False</em><big>)</big><a class="reference internal" href="_modules/ABC.html#abc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ABC.abc" title="Permalink to this definition">¶</a></dt>
+<dt id="ABC.basic_abc">
+<tt class="descclassname">ABC.</tt><tt class="descname">basic_abc</tt><big>(</big><em>model</em>, <em>data</em>, <em>target_epsilon=0.1</em>, <em>min_particles=10</em>, <em>parallel=False</em>, <em>n_procs='all'</em><big>)</big><a class="reference internal" href="_modules/ABC.html#basic_abc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ABC.basic_abc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Preform Approximate Bayesian Computation on a data set given a forward
 model.</p>
 </dd></dl>
 
-</div>
+<dl class="function">
+<dt id="ABC.pmc_abc">
+<tt class="descclassname">ABC.</tt><tt class="descname">pmc_abc</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/ABC.html#pmc_abc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ABC.pmc_abc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 
 
@@ -107,7 +99,7 @@ model.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">SIMPLE 0.1.1 documentation</a> &raquo;</li> 
+        <li><a href="index.html">SIMPLE 0.1.2 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
