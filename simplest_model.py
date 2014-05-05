@@ -33,10 +33,10 @@ class MyModel(model.Model):
 
             #Initalize synthetic catalog.
             catalog = np.zeros(planet_numbers.sum(),
-                           dtype={'names': star_header + planet_header,
-                                  'formats': (['i8'] + ['f8'] *
-                                              (len(star_header + planet_header)
-                                               - 1))})
+                                dtype={'names': star_header + planet_header,
+                                'formats': (['i8'] + ['f8'] *
+                                            (len(star_header + planet_header)
+                                            - 1))})
 
             #Draw the random model parameters.
 

@@ -19,7 +19,7 @@ def main():
 	out = file('benchmark.dat', 'w')
 
 	eps = 0.01
-	min_part = 100
+	min_part = 10
 
 	model = simplest_model.MyModel(stars, obs)
 

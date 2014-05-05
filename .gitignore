@@ -49,3 +49,5 @@ nosetests.xml
 *.fdb_latexmk
 *.blg
 master.bib
+
+DOCS/TALKS
