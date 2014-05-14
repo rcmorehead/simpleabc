@@ -12,8 +12,10 @@ subclass and override the all following methods:
 
 """
 
+from abc import ABCMeta, abstractclass
 
 class Model(object):
+    __metaclass__ = ABCMeta
 
     def __call__(self, theta):
         return self.generate_data_and_reduce(theta)
@@ -32,7 +34,8 @@ class Model(object):
         d = self.distance_function(sum_stats, self.data_sum_stats)
 
         return d
-
+    
+    @abstractmethod
     def draw_theta(self):
         """
         Sub-classable method for drawing from a prior distribution.
@@ -40,10 +43,8 @@ class Model(object):
         This method should return an array-like iterable that is a vector of
         proposed model parameters from your prior distribution.
         """
-
-        raise NotImplementedError('You must override the draw_theta '
-                                  'method in your own subclass.')
-
+    
+    @abstractmethod
     def generate_data(self, theta):
         """
         Sub-classable method for generating synthetic data sets from forward
@@ -53,9 +54,7 @@ class Model(object):
         taking vector theta as an argument.
         """
 
-        raise NotImplementedError('You must override the generate_data '
-                                  'method in your own subclass.')
-
+    @abstractmethod
     def summary_stats(self, data):
         """
         Sub-classable method for computing summary statistics.
@@ -64,9 +63,7 @@ class Model(object):
         taking an array/matrix/table as an argument.
         """
 
-        raise NotImplementedError('You must override the summary_stats '
-                                  'method in your own subclass.')
-
+    @abstractmethod
     def distance_function(self, summary_stats, summary_stats_synth):
         """
         Sub-classable method for computing a distance function.
@@ -76,6 +73,3 @@ class Model(object):
         summary statistics as an argument (nominally the observed summary
         statistics and .
         """
-
-        raise NotImplementedError('You must override the distance_function '
-                                  'method in your own subclass.')
