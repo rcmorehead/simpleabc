@@ -4,7 +4,7 @@ Module for Approximate Bayesian Computation
 """
 
 import multiprocessing
-#import numpy as np
+import numpy as np
 
 def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
               parallel=False, n_procs='all'):
@@ -75,6 +75,29 @@ def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
         return posterior, rejected, accepted_count, trial_count
 
 
-def pmc_abc():
-    raise NotImplementedError('This algorithm coming soon!')
+def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=10,
+              parallel=False, n_procs='all'):
+    """
+    Preform Approximate Bayesian Computation on a data set given a forward
+    model using pmc.
 
+    """
+    #Fist ABC calculation
+    posterior, rejected, accepted_count, trial_count = basic_abc(model,
+                                                                 data,
+                                                                 epsilon_0,
+                                                                 min_particles,
+                                                                 parallel,
+                                                                 n_procs)
+
+
+    tau2 = 2*np.var(posterior)
+
+    weights = np.ones(posterior.size).fill(1/posterior.size)
+
+    theta_star = np.random.choice(posterior, size=min_particles*10,
+                                  replace=True, p=weights)
+
+
+    print weights,theta_star
+    return posterior, rejected, accepted_count, trial_count
