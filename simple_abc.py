@@ -5,6 +5,7 @@ Module for Approximate Bayesian Computation
 
 import multiprocessing
 import numpy as np
+from scipy import stats
 
 def basic_abc(model, data, target_epsilon=0.1, min_particles=10,
               parallel=False, n_procs='all'):
@@ -90,14 +91,25 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=10,
                                                                  parallel,
                                                                  n_procs)
 
+    theta = np.asarray(posterior)
+    theta = theta.T
+    tau2 = np.zeros((1, theta.shape[0]))
 
-    tau2 = 2*np.var(posterior)
-
-    weights = np.ones(posterior.size).fill(1/posterior.size)
-
-    theta_star = np.random.choice(posterior, size=min_particles*10,
-                                  replace=True, p=weights)
+    weights = np.ones((theta.shape[0], theta[1].size))
 
 
-    print weights,theta_star
+    theta_star = np.zeros_like(theta)
+    theta_i = np.zeros_like(theta)
+    for j in xrange(theta.shape[0]):
+        tau2[0][j] = 2*np.var(theta[j])
+
+        weights[j] = weights[j]*1/float(theta[j].size)
+
+        theta_star[j] = np.random.choice(theta[j],
+                                         size=theta[j].size, replace=True,
+                                         p=weights[j])
+        theta_i[j] = stats.norm.rvs(loc=theta_star, scale=tau2[0][j])
+
+    print theta_i
+
     return posterior, rejected, accepted_count, trial_count

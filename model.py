@@ -11,8 +11,7 @@ subclass and override the all following methods:
 * Model.distance_function
 
 """
-
-from abc import ABCMeta, abstractclass
+from abc import ABCMeta, abstractmethod
 
 class Model(object):
     __metaclass__ = ABCMeta
