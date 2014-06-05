@@ -90,7 +90,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=10,
                                                                  min_particles,
                                                                  parallel,
                                                                  n_procs)
-
+    #TODO make theta-like vectors constant size when generated
     theta = np.asarray(posterior)
     theta = theta.T
     tau2 = np.zeros((1, theta.shape[0]))
@@ -108,8 +108,28 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=10,
         theta_star[j] = np.random.choice(theta[j],
                                          size=theta[j].size, replace=True,
                                          p=weights[j])
-        theta_i[j] = stats.norm.rvs(loc=theta_star, scale=tau2[0][j])
+        theta_i[j] = stats.norm.rvs(loc=theta_star[j], scale=np.sqrt(tau2[0][j]))
 
-    print theta_i
 
+    #print theta_i
+    new_weights = calc_weights(theta_i, theta, tau2, weights,
+                               prior=stats.uniform(-2, 4))
+                               #TODO add prior specifcation tp model
+    print new_weights
     return posterior, rejected, accepted_count, trial_count
+
+
+def calc_weights(theta_i, theta, tau2, weights,prior="None"):
+
+    """
+    Calculates importance weights
+    """
+    weights_new = np.zeros_like(theta_i)
+
+    for i in xrange(theta_i.shape[0]):
+        for j in xrange(theta_i[i].size):
+            print theta_i[i][j], prior.pdf(theta_i[i][j]),np.sum(weights[i]*stats.norm.pdf((theta_i[i][j] -theta[i])/np.sqrt(tau2[0][i])))
+            weights_new[i][j] = (prior.pdf(theta_i[i][j]) /
+                              np.sum(weights[i]*stats.norm.pdf((theta_i[i][j] - theta)/np.sqrt(tau2[0][i]))))
+
+    return weights_new
