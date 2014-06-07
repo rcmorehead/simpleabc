@@ -8,6 +8,7 @@ import numpy as np
 from scipy import stats
 
 
+
 class Model(object):
     """
     Base class for constructing models for approximate bayesian computing
@@ -145,19 +146,22 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             trial_count += 1
 
             if pmc_mode:
-                theta_star = list(theta_prev.shape[0])
-                theta = list(theta_prev.shape[0])
+                theta_star = []
+                theta = []
 
                 for j in xrange(theta_prev.shape[0]):
-                    theta_star[j] = np.random.choice(theta_prev[j],
+                    theta_star.append(np.random.choice(theta_prev[j],
                                          replace=True,
-                                         p=weights[j])
-                    theta[j] = stats.norm.rvs(loc=theta_star[j],
-                                    scale=np.sqrt(tau_squared[0][j]))
+                                         p=weights[j]))
+                    #print "t*,tu2: ",theta_star[j], np.sqrt(tau_squared[0][j])
+                    theta.append(stats.norm.rvs(loc=theta_star[j],
+                                    scale=np.sqrt(tau_squared[0][j])))
+
 
             else:
                 theta = model.draw_theta()
 
+            #print theta
             synthetic_data = model.generate_data(theta)
 
             synthetic_summary_stats = model.summary_stats(synthetic_data)
@@ -194,71 +198,71 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
     epsilon = epsilon_0
 
     for step in xrange(steps):
+        print step,epsilon
         if step == 0:
     #Fist ABC calculation
             output_record[step] = basic_abc(model, data, epsilon,
                                             min_particles, parallel,
                                             n_procs, pmc_mode=False)
 
-            theta_prev = np.asarray(output_record[step]['theta accepted']).T
-            tau_squared = np.zeros((1, theta_prev.shape[0]))
-            weights = np.ones((theta_prev.shape[0], theta_prev[1].size))
+            theta = np.asarray(output_record[step]['theta accepted']).T
+            tau_squared = np.zeros((1, theta.shape[0]))
+            weights = np.ones((theta.shape[0], theta[1].size))
 
-            for j in xrange(theta_prev.shape[0]):
-                tau_squared[0][j] = 2*np.var(theta_prev[j])
-                weights[j] = weights[j]*1/float(theta_prev[j].size)
+            for j in xrange(theta.shape[0]):
+                tau_squared[0][j] = 2*np.var(theta[j])
+                weights[j] = weights[j]*1/float(theta[j].size)
 
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
-            print tau_squared
-            print weights
-            print epsilon
+            #print tau_squared
+            #print weights
+            #print epsilon
 
         else:
-            pass
+            theta_prev = theta
+            weights_prev = weights
+            output_record[step] = basic_abc(model, data, epsilon,
+                                            min_particles, parallel,
+                                            n_procs, pmc_mode=True,
+                                            weights=weights,
+                                            theta_prev=theta_prev,
+                                            tau_squared=tau_squared)
 
+            theta = np.asarray(output_record[step]['theta accepted']).T
+            epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
+                                              per=75)
 
-        # theta = np.asarray(posterior)
-        # theta = theta.T
-        # tau_squared = np.zeros((1, theta.shape[0]))
-        #
-        # weights = np.ones((theta.shape[0], theta[1].size))
-        #
-        # theta_i, rej, acc, trial = basic_abc(model, data, target_epsilon=0.1,
-        #                                  min_particles=10, parallel=False,
-        #                                  n_procs='all', pmc_mode=False,
-        #                                  weights=weights, theta_prev=theta,
-        #                                  tau_squared=tau_squared)
-        #
-        #
-        # theta_i = np.asarray(theta_i).T
-        #
-        # new_weights = calc_weights(theta_i, theta, tau_squared, weights,
-        #                        prior=stats.uniform(-2, 4))
+            weights = calc_weights(theta_prev, theta, tau_squared,
+                                   weights_prev,prior=model.prior)
+            #print "w ",weights
+            #print "sum(w) ",sum(weights[0]),sum(weights[1])
 
-        #mean.prev <- sum(mu[t-1,]*weights[t-1,])
-		#var.prev <- sum((mu[t-1,] - mean.prev)^2*weights[t-1,])
-        #
-        #                       #TODO add prior specifcation tp model
+            tau_squared = np.zeros((1, theta_prev.shape[0]))
+            for j in xrange(theta.shape[0]):
+                mean_theta = np.sum(theta * weights[j])
+                var_theta = np.sum((theta - mean_theta)**2 * weights[j])
+
+                tau_squared[0][j] = 2*var_theta
 
     print output_record
 
     return output_record
 
 
-def calc_weights(theta_i, theta, tau_squared, weights,prior="None"):
+def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
 
     """
     Calculates importance weights
     """
-    weights_new = np.zeros_like(theta_i)
+    weights_new = np.zeros_like(theta_prev)
 
-    for i in xrange(theta_i.shape[0]):
-        for j in xrange(theta_i[i].size):
-            weights_new[i][j] = (prior.pdf(theta_i[i][j]) /
+    for i in xrange(theta_prev.shape[0]):
+        for j in xrange(theta_prev[i].size):
+            weights_new[i][j] = (prior[i].pdf(theta_prev[i][j]) /
                                 np.sum(weights[i]*stats.norm.pdf(
-                                  (theta_i[i][j] - theta),
+                                  (theta_prev[i][j] - theta),
                                   np.sqrt(tau_squared[0][i]))))
 
-
+        weights_new[i] = weights_new[i]/sum(weights_new[i])
     return weights_new
