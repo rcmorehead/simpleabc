@@ -1,6 +1,6 @@
 
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import ABC 
 import simplest_model  
 #from astropy.io import ascii

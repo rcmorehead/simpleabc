@@ -220,6 +220,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
+
+
             #print tau_squared
             #print weights
             #print epsilon
@@ -238,6 +240,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
+
+
             #print theta_prev
             weights = calc_weights(theta_prev, theta, tau_squared,
                                    weights_prev, prior=model.prior)
@@ -246,8 +250,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
             tau_squared = np.zeros((1, theta_prev.shape[0]))
             for j in xrange(theta.shape[0]):
-                mean_theta = np.sum(theta * weights[j])
-                var_theta = np.sum((theta - mean_theta)**2 * weights[j])
+                mean_theta = np.sum(theta[j] * weights[j])
+                var_theta = np.sum((theta[j] - mean_theta)**2 * weights[j])
 
                 tau_squared[0][j] = 2*var_theta
 
