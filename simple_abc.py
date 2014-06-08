@@ -157,10 +157,12 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                     theta.append(stats.norm.rvs(loc=theta_star[j],
                                     scale=np.sqrt(tau_squared[0][j])))
 
-
             else:
                 theta = model.draw_theta()
-
+           #TODO this is a bad hack get it out of hear
+            #print theta
+            #if theta[1] < 0:
+            #    theta[1] = abs(theta[1])
             #print theta
             synthetic_data = model.generate_data(theta)
 
@@ -192,7 +194,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('D accepted', object),
                                            ('n accepted', float),
                                            ('n total', float),
-                                           ('epsilion', float),
+                                           ('epsilon', float),
                                            ] )
 
     epsilon = epsilon_0
@@ -201,13 +203,16 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
         print step,epsilon
         if step == 0:
     #Fist ABC calculation
-            output_record[step] = basic_abc(model, data, epsilon,
-                                            min_particles, parallel,
-                                            n_procs, pmc_mode=False)
+            output_record[step] = basic_abc(model, data, epsilon=epsilon,
+                                            min_particles=min_particles,
+                                            parallel=parallel,
+                                            n_procs= n_procs, pmc_mode=False)
 
             theta = np.asarray(output_record[step]['theta accepted']).T
+            #print theta.shape
             tau_squared = np.zeros((1, theta.shape[0]))
-            weights = np.ones((theta.shape[0], theta[1].size))
+            #print tau_squared
+            weights = np.ones(theta.shape)
 
             for j in xrange(theta.shape[0]):
                 tau_squared[0][j] = 2*np.var(theta[j])
@@ -222,9 +227,10 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
         else:
             theta_prev = theta
             weights_prev = weights
-            output_record[step] = basic_abc(model, data, epsilon,
-                                            min_particles, parallel,
-                                            n_procs, pmc_mode=True,
+            output_record[step] = basic_abc(model, data, epsilon=epsilon,
+                                            min_particles=min_particles,
+                                            parallel=parallel,
+                                            n_procs= n_procs, pmc_mode=True,
                                             weights=weights,
                                             theta_prev=theta_prev,
                                             tau_squared=tau_squared)
@@ -232,9 +238,9 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
-
+            #print theta_prev
             weights = calc_weights(theta_prev, theta, tau_squared,
-                                   weights_prev,prior=model.prior)
+                                   weights_prev, prior=model.prior)
             #print "w ",weights
             #print "sum(w) ",sum(weights[0]),sum(weights[1])
 
@@ -245,7 +251,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
                 tau_squared[0][j] = 2*var_theta
 
-    print output_record
+    #print output_record
 
     return output_record
 
@@ -255,14 +261,14 @@ def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
     """
     Calculates importance weights
     """
-    weights_new = np.zeros_like(theta_prev)
+    weights_new = np.zeros_like(theta)
 
-    for i in xrange(theta_prev.shape[0]):
-        for j in xrange(theta_prev[i].size):
-            weights_new[i][j] = (prior[i].pdf(theta_prev[i][j]) /
-                                np.sum(weights[i]*stats.norm.pdf(
-                                  (theta_prev[i][j] - theta),
-                                  np.sqrt(tau_squared[0][i]))))
+    for i in xrange(theta.shape[0]):
+        for j in xrange(theta[i].size):
+            weights_new[i][j] = (prior[i].pdf(theta[i][j]) /
+                                np.sum(weights[i]*stats.norm.pdf(theta[i],
+                                                                 theta_prev[i],
+                                np.sqrt(tau_squared[0][i]))))
 
         weights_new[i] = weights_new[i]/sum(weights_new[i])
     return weights_new
