@@ -1,9 +1,10 @@
-import model
+#import model
+from simple_abc import Model
 from scipy import stats
 import numpy as np
 from simple_lib import *
 
-class MyModel(model.Model):
+class MyModel(Model):
 
         def __init__(self, stars, data):
             self.stars = stars
@@ -11,12 +12,22 @@ class MyModel(model.Model):
             self.data_sum_stats = self.summary_stats(self.data)
 
         def draw_theta(self):
-            binom_n = stats.randint.rvs(1, 10, 1)
-            scale = stats.uniform.rvs(0, 10, 1)
+            theta=[]
+            for p in self.prior:
+                theta.append(p.rvs())
 
-            return binom_n, scale[0]
+            #binom_n = stats.randint.rvs(1, 10, 1)
+            #scale = stats.uniform.rvs(0, 10, 1)
+            if theta[0] <= 1:
+                theta[0] = 1
+            if theta[1] <= 0:
+                theta[1] = 0.0001
+
+
+            return theta
 
         def generate_data(self, theta):
+
             planet_numbers = (
                 self.planets_per_system(theta[0],
                                         self.stars['ktc_kepler_id'].size))

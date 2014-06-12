@@ -240,7 +240,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
-
+            if epsilon == 0.0 :
+                epsilon = 0.001
 
             #print theta_prev
             weights = calc_weights(theta_prev, theta, tau_squared,
