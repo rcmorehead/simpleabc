@@ -200,7 +200,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
     epsilon = epsilon_0
 
     for step in xrange(steps):
-        print step,epsilon
+        print step, epsilon
         if step == 0:
     #Fist ABC calculation
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
@@ -227,6 +227,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             #print epsilon
 
         else:
+            #print weights
             theta_prev = theta
             weights_prev = weights
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
@@ -240,6 +241,10 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
+
+
+
+
             if epsilon == 0.0 :
                 epsilon = 0.001
 
@@ -249,14 +254,20 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             #print "w ",weights
             #print "sum(w) ",sum(weights[0]),sum(weights[1])
 
+            n = theta[0].size
+            #print weights_prev
             tau_squared = np.zeros((1, theta_prev.shape[0]))
+            effective_sample = np.zeros((1, theta_prev.shape[0]))
             for j in xrange(theta.shape[0]):
+                w_sum = weights_prev[j].sum()
+                w_sum2 = sum(weights_prev[j]**2)
+                effective_sample[0][j] = (w_sum * w_sum) / w_sum2
                 mean_theta = np.sum(theta[j] * weights[j])
                 var_theta = np.sum((theta[j] - mean_theta)**2 * weights[j])
 
                 tau_squared[0][j] = 2*var_theta
 
-    #print output_record
+            print "Effective sample size(s): {}".format(effective_sample)
 
     return output_record
 
@@ -276,4 +287,5 @@ def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
                                 np.sqrt(tau_squared[0][i]))))
 
         weights_new[i] = weights_new[i]/sum(weights_new[i])
+        #print weights_new[i]
     return weights_new
