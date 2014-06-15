@@ -6,7 +6,8 @@ from abc import ABCMeta, abstractmethod
 import multiprocessing
 import numpy as np
 from scipy import stats
-
+import pylab as plt
+import triangle
 
 
 class Model(object):
@@ -93,7 +94,8 @@ class Model(object):
 
 def basic_abc(model, data, epsilon=0.1, min_particles=10,
               parallel=False, n_procs='all', pmc_mode=False,
-              weights='None', theta_prev='None', tau_squared='None'):
+              weights='None', theta_prev='None', tau_squared='None',
+              plot=False, which_step=0):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model.
@@ -177,20 +179,28 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             else:
                 rejected.append(theta)
 
-        return (posterior, rejected, distances,
+        if plot:
+            plt.figure()
+            #TODO Make labels generic for any number of theta_i
+            triangle.corner(posterior, labels=[r'$\theta_1$', r'$\theta_2$'])
+            plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
+            plt.figure()
+
+
+        return (posterior, distances,
                 accepted_count, trial_count,
                 epsilon)
 
 
 def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
-              steps=10, parallel=False, n_procs='all'):
+              steps=10, parallel=False, n_procs='all', plot=False):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model using pmc.
 
     """
     output_record = np.empty(steps, dtype=[('theta accepted', object),
-                                           ('theta rejected', object),
+                                           #('theta rejected', object),
                                            ('D accepted', object),
                                            ('n accepted', float),
                                            ('n total', float),
@@ -206,7 +216,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
                                             min_particles=min_particles,
                                             parallel=parallel,
-                                            n_procs= n_procs, pmc_mode=False)
+                                            n_procs=n_procs, pmc_mode=False,
+                                            plot=plot, which_step=step)
 
             theta = np.asarray(output_record[step]['theta accepted']).T
             #print theta.shape
@@ -236,7 +247,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                             n_procs= n_procs, pmc_mode=True,
                                             weights=weights,
                                             theta_prev=theta_prev,
-                                            tau_squared=tau_squared)
+                                            tau_squared=tau_squared,
+                                            plot=plot, which_step=step)
 
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],

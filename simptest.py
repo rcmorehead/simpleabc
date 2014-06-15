@@ -11,12 +11,13 @@ import time
 from scipy import stats
 from triangle import corner
 
+
 def main():
     np.random.seed(917)
 
-    steps = 3
+    steps = 2
     eps = 0.01
-    min_part = 100
+    min_part = 10
 
     stars = pickle.load(file('stars.pkl'))
     #obs = pickle.load(file('data.pkl'))
@@ -38,15 +39,17 @@ def main():
 
     start = time.time()
     OT = pmc_abc(model, obs, min_particles=min_part, steps=steps,
-    						 target_epsilon=eps, parallel=False)
+    						 target_epsilon=eps, parallel=False, plot=True)
     end = time.time()
     print 'Serial took {}s'.format(end - start)
-
-    for step in xrange(steps):
-        figure()
-        corner(OT[step]['theta accepted'], truths=(theta[0], theta[1]))
-        #show()
-        savefig('PLOTS/simple{}_posterior.png'.format(step))
+    out_pickle = file('simptest.pkl', 'w')
+    pickle.dump(OT, out_pickle)
+    out_pickle.close()
+   # for step in xrange(steps):
+   #     figure()
+   #     corner(OT[step]['theta accepted'], truths=(theta[0], theta[1]))
+   #     #show()
+   #     savefig('PLOTS/simple{}_posterior.png'.format(step))
     #     THETAR = asarray(OT[step]['theta rejected']).T
     #     THETAA = asarray(OT[step]['theta accepted']).T
     #     figure()
