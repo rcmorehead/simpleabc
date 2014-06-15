@@ -196,8 +196,30 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
 
     #TODO Make this robust against b > 1
 
-    return (p / np.pi *
+    duration = np.where((b < 1.0) & (e < 1.0), (p / np.pi *
             np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
                       np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
                               - b**2)) *
-            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs
+            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs, 0)
+
+    return duration
+
+
+def xi(catalog):
+    """
+    Compute xi for all planet pairs in catalog.
+
+    """
+    catalog.sort(order=['ktc_kepler_id', 'period'])
+
+    out = []
+    for j in xrange(1, catalog['period'].size):
+        if catalog['period'][j] > catalog['period'][j-1]:
+            if catalog['T'][j] > 0.0 and catalog['T'][j-1] > 0.0:
+                out.append(np.log10(((catalog['T'][j-1]/24.0) /
+                                     (catalog['T'][j]/24.0)) *
+                           (catalog['period'][j] /
+                            catalog['period'][j-1])**(1/3.)))
+
+
+    return np.array(out)
