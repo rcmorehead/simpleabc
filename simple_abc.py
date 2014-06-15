@@ -183,7 +183,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             plt.figure()
             #TODO Make labels generic for any number of theta_i
             triangle.corner(posterior, labels=[r'$\theta_1$', r'$\theta_2$'])
-            plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
+            plt.savefig('PLOTS/simptest_{}_posterior.eps'.format(which_step))
             plt.figure()
 
 
