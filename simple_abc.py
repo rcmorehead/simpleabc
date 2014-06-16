@@ -161,11 +161,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
 
             else:
                 theta = model.draw_theta()
-           #TODO this is a bad hack get it out of hear
-            #print theta
-            #if theta[1] < 0:
-            #    theta[1] = abs(theta[1])
-            #print theta
+
             synthetic_data = model.generate_data(theta)
 
             synthetic_summary_stats = model.summary_stats(synthetic_data)
@@ -182,7 +178,10 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
         if plot:
             plt.figure()
             #TODO Make labels generic for any number of theta_i
-            triangle.corner(posterior, labels=[r'$\theta_1$', r'$\theta_2$'])
+            triangle.corner(posterior, labels=[r'$\sigma_{mi}$ [degrees]',
+                                               r'$\sigma_{e}$'],
+                            plot_contours=True,  truths=(1.5, 0.1))
+            plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
             plt.savefig('PLOTS/simptest_{}_posterior.eps'.format(which_step))
             plt.figure()
 

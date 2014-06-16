@@ -205,21 +205,55 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     return duration
 
 
+# def xi(catalog):
+#     """
+#     Compute xi for all planet pairs in catalog.
+#
+#     """
+#     catalog.sort(order=['ktc_kepler_id', 'period'])
+#
+#     out = []
+#     for j in xrange(1, catalog['period'].size):
+#         if catalog['period'][j] > catalog['period'][j-1]:
+#             if catalog['T'][j] > 0.0 and catalog['T'][j-1] > 0.0:
+#                 out.append(np.log10(((catalog['T'][j-1]/24.0) /
+#                                      (catalog['T'][j]/24.0)) *
+#                            (catalog['period'][j] /
+#                             catalog['period'][j-1])**(1/3.)))
+#
+#
+#     return np.array(out)
+
 def xi(catalog):
     """
     Compute xi for all planet pairs in catalog.
 
     """
+
     catalog.sort(order=['ktc_kepler_id', 'period'])
 
     out = []
     for j in xrange(1, catalog['period'].size):
-        if catalog['period'][j] > catalog['period'][j-1]:
-            if catalog['T'][j] > 0.0 and catalog['T'][j-1] > 0.0:
-                out.append(np.log10(((catalog['T'][j-1]/24.0) /
-                                     (catalog['T'][j]/24.0)) *
-                           (catalog['period'][j] /
-                            catalog['period'][j-1])**(1/3.)))
+        if catalog['ktc_kepler_id'][j] == catalog['ktc_kepler_id'][j-1]:
+            out.append(np.log10(((catalog['T'][j-1]/24.0) /
+                                (catalog['T'][j]/24.0)) *
+                                (catalog['period'][j] /
+                                 catalog['period'][j-1])**(1/3.)))
 
 
     return np.array(out)
+
+
+def xi2(catalog):
+    """
+
+    :param catalog:
+    :return:
+    """
+    xis = []
+    for i in np.unique(catalog['ktc_kepler_id']):
+        xis.append(i)
+        indicies = np.where(catalog['ktc_kepler_id'] == i)[0]
+
+    return xis
+

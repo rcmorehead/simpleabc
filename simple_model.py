@@ -80,7 +80,8 @@ class MyModel(Model):
             return catalog
 
         def summary_stats(self, data):
-            return xi(data)
+            transits_only = np.extract(data['T'] > 0.0, data)
+            return xi(transits_only)
 
         def distance_function(self, summary_stats, summary_stats_synth):
             d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]

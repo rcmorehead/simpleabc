@@ -19,7 +19,8 @@ def main():
     eps = 0.01
     min_part = 10
 
-    stars = pickle.load(file('stars.pkl'))
+    #stars = pickle.load(file('stars.pkl'))
+    stars = pickle.load(file('stars_trimmed.pkl'))
     #obs = pickle.load(file('data.pkl'))
 
     model = simple_model.MyModel(stars)
@@ -38,7 +39,7 @@ def main():
     n_procs = [1, 2, 3, 4, 5, 6, 7, 8]
 
     start = time.time()
-    OT = pmc_abc(model, obs, min_particles=min_part, steps=steps,
+    OT = pmc_abc(model, obs, epsilon_0=0.15, min_particles=min_part, steps=steps,
     						 target_epsilon=eps, parallel=False, plot=True)
     end = time.time()
     print 'Serial took {}s'.format(end - start)
