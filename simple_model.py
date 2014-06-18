@@ -11,8 +11,6 @@ class MyModel(Model):
             #self.data = data
             #self.data_sum_stats = self.summary_stats(self.data)
 
-
-
         def draw_theta(self):
             theta = []
             for p in self.prior:
@@ -36,7 +34,8 @@ class MyModel(Model):
                        'cdpp3', 'cdpp6', 'cdpp12', 'kepmag', 'days_obs']
 
             planet_header = ['b', 'i', 'a', 'planet_mass', 'planet_radius', 'T',
-                            'period', 'mi', 'fund_plane', 'fund_node', 'e', 'w']
+                             'period', 'mi', 'fund_plane', 'fund_node', 'e',
+                             'w', 'depth', 'snr']
 
             #Initalize synthetic catalog.
             catalog = np.zeros(planet_numbers.sum(),
@@ -47,7 +46,7 @@ class MyModel(Model):
 
             #Draw the random model parameters.
 
-            if theta[0] <= 0.0 or theta[1] <= 0.0:
+            if theta[0] <= 0.0 or theta[1] <= 0.0 or theta[0] > 90.0 or theta[1] >= 1.0:
                 return catalog
 
             catalog['period'] = self.planet_period(total_planets)
@@ -72,16 +71,24 @@ class MyModel(Model):
                                         catalog['i'], catalog['w'],
                                         catalog['radius'])
 
+            #Strip non-transiting planets/ unbound
+            catalog = np.extract((catalog['b'] < 1.0) & (catalog['e'] <= 1.0),
+                                 catalog)
+
             catalog['T'] = transit_duration(catalog['period'], catalog['a'],
                                             catalog['e'], catalog['i'],
                                             catalog['w'], catalog['b'],
                                             catalog['radius'],
                                             catalog['planet_radius'])
+
+            #Strip nans from T  (planets in giant stars)
+            catalog = np.extract(~np.isnan(catalog['T'])
+                                 == True, catalog)
+
             return catalog
 
         def summary_stats(self, data):
-            transits_only = np.extract(data['T'] > 0.0, data)
-            return xi(transits_only)
+            return xi(data)
 
         def distance_function(self, summary_stats, summary_stats_synth):
             d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]

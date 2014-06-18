@@ -2,7 +2,7 @@
 Useful classes and functions for SIMPLE.
 """
 import numpy as np
-
+import warnings
 r_sun_au = 0.004649
 r_earth_r_sun = 0.009155
 day_hrs = 24.0
@@ -195,8 +195,13 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     """
 
     #TODO Make this robust against b > 1
-
-    duration = np.where((b < 1.0) & (e < 1.0), (p / np.pi *
+    #warnings.simplefilter("always")
+    #print "pars", p, a, e, i, w, b, r_star, r_planet
+    #print ""
+    #print (1 - (r_planet * r_earth_r_sun) / r_star)**2 - b**2
+    #print (1 - e**2)
+    #print ""
+    duration = np.where(e < 1.0, (p / np.pi *
             np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
                       np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
                               - b**2)) *
@@ -244,16 +249,7 @@ def xi(catalog):
     return np.array(out)
 
 
-def xi2(catalog):
+def snr(catalog):
     """
-
-    :param catalog:
-    :return:
+    Calculate Signal to Noise ratio for a planet transit
     """
-    xis = []
-    for i in np.unique(catalog['ktc_kepler_id']):
-        xis.append(i)
-        indicies = np.where(catalog['ktc_kepler_id'] == i)[0]
-
-    return xis
-
