@@ -201,11 +201,19 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     #print (1 - (r_planet * r_earth_r_sun) / r_star)**2 - b**2
     #print (1 - e**2)
     #print ""
-    duration = np.where(e < 1.0, (p / np.pi *
+    #duration = np.where(e < 1.0, (p / np.pi *
+    #        np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
+    #                  np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
+    #                          - b**2)) *
+    #        1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs, 0)
+
+    #return duration
+
+    duration = (p / np.pi *
             np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
                       np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
                               - b**2)) *
-            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs, 0)
+            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs
 
     return duration
 

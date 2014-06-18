@@ -16,16 +16,12 @@ class MyModel(Model):
             for p in self.prior:
                 theta.append(p.rvs())
 
-            #mi_scale = stats.uniform.rvs(0, 10, 1)
-            #e_scales = stats.uniform.rvs(0, 0.5, 1)
-
             return theta
 
         def generate_data(self, theta):
 
-            planet_numbers = (
-                self.planets_per_system(5,
-                                        self.stars['ktc_kepler_id'].size))
+            planet_numbers = (self.planets_per_system(5,
+                              self.stars['ktc_kepler_id'].size))
 
             total_planets = planet_numbers.sum()
 
@@ -88,12 +84,15 @@ class MyModel(Model):
             return catalog
 
         def summary_stats(self, data):
-            return xi(data)
+            #return xi(data)
+            xi_data = xi(data)
+            return (xi_data.mean(), xi_data.var())
 
         def distance_function(self, summary_stats, summary_stats_synth):
-            d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]
+            #d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]
             #ksd_sc = stats.ks_2samp(summary_stats[1], summary_stats_synth[1])[0]
-
+            d = np.sqrt((summary_stats_synth[0]-summary_stats[0])**2
+                        + (summary_stats_synth[0]-summary_stats[1])**2)
             return d
 
         def planets_per_system(self, n, size):
