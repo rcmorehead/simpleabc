@@ -201,21 +201,21 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     #print (1 - (r_planet * r_earth_r_sun) / r_star)**2 - b**2
     #print (1 - e**2)
     #print ""
-    #duration = np.where(e < 1.0, (p / np.pi *
-    #        np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
-    #                  np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
-    #                          - b**2)) *
-    #        1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs, 0)
-
-    #return duration
-
-    duration = (p / np.pi *
+    duration = np.where(e < 1.0, (p / np.pi *
             np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
                       np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
                               - b**2)) *
-            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs
+            1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs, 0)
 
     return duration
+
+    #duration = (p / np.pi *
+    #        np.arcsin((r_star * r_sun_au) / a * 1 / np.sin(np.radians(i)) *
+    #                  np.sqrt((1 - (r_planet * r_earth_r_sun) / r_star)**2
+    #                          - b**2)) *
+    #        1 / (1 + e*np.sin(np.radians(w))) * np.sqrt(1 - e**2)) * day_hrs#
+
+    #return duration
 
 
 # def xi(catalog):
@@ -237,27 +237,42 @@ def transit_duration(p, a, e, i, w, b, r_star, r_planet):
 #
 #     return np.array(out)
 
-def xi(catalog):
-    """
-    Compute xi for all planet pairs in catalog.
-
-    """
-
-    catalog.sort(order=['ktc_kepler_id', 'period'])
-
-    out = []
-    for j in xrange(1, catalog['period'].size):
-        if catalog['ktc_kepler_id'][j] == catalog['ktc_kepler_id'][j-1]:
-            out.append(np.log10(((catalog['T'][j-1]/24.0) /
-                                (catalog['T'][j]/24.0)) *
-                                (catalog['period'][j] /
-                                 catalog['period'][j-1])**(1/3.)))
-
-
-    return np.array(out)
+# def xi(catalog):
+#     """
+#     Compute xi for all planet pairs in catalog.
+#
+#     """
+#
+#     catalog.sort(order=['ktc_kepler_id', 'period'])
+#
+#     out = []
+#     for j in xrange(1, catalog['period'].size):
+#         if catalog['ktc_kepler_id'][j] == catalog['ktc_kepler_id'][j-1]:
+#             out.append(np.log10(((catalog['T'][j-1]/24.0) /
+#                                 (catalog['T'][j]/24.0)) *
+#                                 (catalog['period'][j] /
+#                                  catalog['T'][j-1])**(1/3.)))
+#
+#
+#     return np.array(out)
 
 
 def snr(catalog):
     """
     Calculate Signal to Noise ratio for a planet transit
     """
+
+def xi(catalog):
+    catalog.sort(order=['ktc_kepler_id', 'period'])
+    p_in = np.roll(catalog['period'], 1)
+    t_in = np.roll(catalog['T'], 1)
+    id = np.roll(catalog['ktc_kepler_id'],1)
+
+    idx = np.where(catalog['ktc_kepler_id'] == id)
+
+    P_ratio = catalog['period'][idx]/p_in[idx]
+    D_ratio = t_in[idx]/catalog['T'][idx]
+
+    #idx = np.where(P_ratio >= 1.0)
+    #print P_ratio
+    return np.log10(D_ratio * P_ratio**(1./3.))

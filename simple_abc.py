@@ -183,7 +183,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                             plot_contours=False,  truths=(1.5, 0.1))
             plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
             plt.savefig('PLOTS/simptest_{}_posterior.eps'.format(which_step))
-            plt.figure()
+
 
 
         return (posterior, distances,

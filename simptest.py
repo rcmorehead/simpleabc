@@ -15,19 +15,19 @@ from triangle import corner
 def main():
     np.random.seed(917)
 
-    steps = 15
+    steps = 5
     eps = 0.01
-    min_part = 2000
+    min_part = 500
 
     #stars = pickle.load(file('stars.pkl'))
     stars = pickle.load(file('stars_trimmed.pkl'))
     #obs = pickle.load(file('data.pkl'))
 
     model = simple_model.MyModel(stars)
-    model.set_prior([stats.uniform(0, 90),
+    model.set_prior([stats.uniform(0.5, 1.0),
                     stats.uniform(0, 1.0)])
 
-    theta = (1.5, 0.1)
+    theta = (0.513265306122, 0.1)
 
     obs = model.generate_data(theta)
     model.set_data(obs)

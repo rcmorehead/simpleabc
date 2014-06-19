@@ -3,6 +3,7 @@ from simple_abc import Model
 from scipy import stats
 import numpy as np
 from simple_lib import *
+import pylab as plt
 
 class MyModel(Model):
 
@@ -42,7 +43,7 @@ class MyModel(Model):
 
             #Draw the random model parameters.
 
-            if theta[0] <= 0.0 or theta[1] <= 0.0 or theta[0] > 90.0 or theta[1] >= 1.0:
+            if theta[0] < 0.5 or theta[1] <= 0.0 or theta[0] > 1.0 or theta[1] >= 1.0:
                 return catalog
 
             catalog['period'] = self.planet_period(total_planets)
@@ -54,8 +55,6 @@ class MyModel(Model):
             catalog['planet_radius'] = self.planet_radius(total_planets)
             for h in star_header:
                 catalog[h] = np.repeat(self.stars[h], planet_numbers)
-
-
 
             # print catalog.dtype.names
 
@@ -72,27 +71,30 @@ class MyModel(Model):
                                  catalog)
 
             catalog['T'] = transit_duration(catalog['period'], catalog['a'],
-                                            catalog['e'], catalog['i'],
-                                            catalog['w'], catalog['b'],
-                                            catalog['radius'],
-                                            catalog['planet_radius'])
+                                             catalog['e'], catalog['i'],
+                                             catalog['w'], catalog['b'],
+                                             catalog['radius'],
+                                             catalog['planet_radius'])
 
-            #Strip nans from T  (planets in giant stars)
+            # #Strip nans from T  (planets in giant stars)
             catalog = np.extract(~np.isnan(catalog['T'])
-                                 == True, catalog)
-
+                                  == True, catalog)
+            #
+            #print catalog['T'].min(),catalog['T'].max()
             return catalog
 
         def summary_stats(self, data):
-            #return xi(data)
-            xi_data = xi(data)
-            return (xi_data.mean(), xi_data.var())
+            #xi(data)
+            #return [0,0,0]
+            return xi(data)
+            #xi_data = xi(data)
+            #return (xi_data.mean(), xi_data.var())
 
         def distance_function(self, summary_stats, summary_stats_synth):
-            #d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]
+            d = stats.ks_2samp(summary_stats, summary_stats_synth)[0]
             #ksd_sc = stats.ks_2samp(summary_stats[1], summary_stats_synth[1])[0]
-            d = np.sqrt((summary_stats_synth[0]-summary_stats[0])**2
-                        + (summary_stats_synth[0]-summary_stats[1])**2)
+            #d = np.sqrt((summary_stats_synth[0]-summary_stats[0])**2
+            #            + (summary_stats_synth[0]-summary_stats[1])**2)
             return d
 
         def planets_per_system(self, n, size):
@@ -108,6 +110,7 @@ class MyModel(Model):
             return np.degrees(np.arccos(2*stats.uniform.rvs(0, 1, size)-1))
 
         def mutual_inclination(self, scale, size):
+            scale = 90 - np.arccos(2 * scale - 1)*180/np.pi
             return stats.rayleigh.rvs(scale, size=size)
 
         def eccentricity(self, scale, size):
