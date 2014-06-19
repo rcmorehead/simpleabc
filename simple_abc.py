@@ -8,7 +8,7 @@ import numpy as np
 from scipy import stats
 import pylab as plt
 import triangle
-
+import pickle
 
 class Model(object):
     """
@@ -184,7 +184,20 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
             plt.savefig('PLOTS/simptest_{}_posterior.eps'.format(which_step))
 
+            output_record = np.empty(1, dtype=[('theta accepted', object),
+                                           #('theta rejected', object),
+                                           ('D accepted', object),
+                                           ('n accepted', float),
+                                           ('n total', float),
+                                           ('epsilon', float),
+                                           ] )
 
+            output_record[0] = (posterior, distances, accepted_count, trial_count,
+                             epsilon)
+
+            out_pickle = file('simptest_{}.pkl'.format(which_step), 'w')
+            pickle.dump(output_record, out_pickle)
+            out_pickle.close()
 
         return (posterior, distances,
                 accepted_count, trial_count,
