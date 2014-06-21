@@ -134,7 +134,7 @@ def semimajor_axis(period, mass):
     return (((2.959E-4*mass)/(4*np.pi**2))*period**2.0) ** (1.0/3.0)
 
 
-def transit_depth():
+def transit_depth(r_star, r_planet):
     """
     One-line description
 
@@ -151,7 +151,7 @@ def transit_depth():
 
 
     """
-    pass
+    return ((r_planet * r_earth_r_sun)/r_star)**2 * 1e6
 
 def transit_duration(p, a, e, i, w, b, r_star, r_planet):
     """
@@ -262,11 +262,15 @@ def snr(catalog):
     Calculate Signal to Noise ratio for a planet transit
     """
 
+    return catalog['depth']/catalog['cdpp6'] * np.sqrt((catalog['days_obs'] /
+                                                        catalog['period']) *
+                                                        catalog['T']/6.0)
+
 def xi(catalog):
     catalog.sort(order=['ktc_kepler_id', 'period'])
     p_in = np.roll(catalog['period'], 1)
     t_in = np.roll(catalog['T'], 1)
-    id = np.roll(catalog['ktc_kepler_id'],1)
+    id = np.roll(catalog['ktc_kepler_id'], 1)
 
     idx = np.where(catalog['ktc_kepler_id'] == id)
 

@@ -76,9 +76,14 @@ class MyModel(Model):
                                              catalog['radius'],
                                              catalog['planet_radius'])
 
+            catalog['depth'] = transit_depth(catalog['radius'],
+                                             catalog['planet_radius'])
+
+            catalog['snr'] = snr(catalog)
+
             # #Strip nans from T  (planets in giant stars)
-            catalog = np.extract(~np.isnan(catalog['T'])
-                                  == True, catalog)
+            catalog = np.extract((~np.isnan(catalog['snr'])
+                                  == True) & (catalog['snr'] > 10.0), catalog)
             #
             #print catalog['T'].min(),catalog['T'].max()
             return catalog
@@ -121,4 +126,4 @@ class MyModel(Model):
 
         def planet_radius(self, size):
             return (10**stats.uniform.rvs(np.log10(1.0), np.log10(19.0),
-                    size=size) * 0.009155)
+                    size=size))
