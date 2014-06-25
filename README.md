@@ -4,7 +4,7 @@ SIMPLE-ABC
 A Python package for Approximate Bayesian Computation
 Version 0.1.2
 
-[Documentation](http://rcmorehead.github.io/SIMPLE-ABC/DOCS/_build/html/index.html)
+
 
 ###WARNING! 
 This code is still very alpha, use at own risk! 
