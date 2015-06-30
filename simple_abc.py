@@ -6,9 +6,6 @@ from abc import ABCMeta, abstractmethod
 import multiprocessing
 import numpy as np
 from scipy import stats
-import pylab as plt
-import triangle
-import pickle
 
 class Model(object):
     """
@@ -95,7 +92,7 @@ class Model(object):
 def basic_abc(model, data, epsilon=0.1, min_particles=10,
               parallel=False, n_procs='all', pmc_mode=False,
               weights='None', theta_prev='None', tau_squared='None',
-              plot=False, which_step=0):
+              which_step=0):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model.
@@ -175,29 +172,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             else:
                 rejected.append(theta)
 
-        if plot:
-            plt.figure()
-            #TODO Make labels generic for any number of theta_i
-            triangle.corner(posterior, labels=[r'$\sigma_{mi}$ [degrees]',
-                                               r'$\sigma_{e}$'],
-                            plot_contours=False,  truths=(1.5, 0.1))
-            plt.savefig('PLOTS/simptest_{}_posterior.png'.format(which_step))
-            plt.savefig('PLOTS/simptest_{}_posterior.eps'.format(which_step))
 
-            output_record = np.empty(1, dtype=[('theta accepted', object),
-                                           #('theta rejected', object),
-                                           ('D accepted', object),
-                                           ('n accepted', float),
-                                           ('n total', float),
-                                           ('epsilon', float),
-                                           ] )
-
-            output_record[0] = (posterior, distances, accepted_count, trial_count,
-                             epsilon)
-
-            out_pickle = file('simptest_{}.pkl'.format(which_step), 'w')
-            pickle.dump(output_record, out_pickle)
-            out_pickle.close()
 
         return (posterior, distances,
                 accepted_count, trial_count,
@@ -205,7 +180,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
 
 
 def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
-              steps=10, parallel=False, n_procs='all', plot=False):
+              steps=10, parallel=False, n_procs='all'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model using pmc.
