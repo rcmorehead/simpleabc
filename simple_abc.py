@@ -204,7 +204,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                             min_particles=min_particles,
                                             parallel=parallel,
                                             n_procs=n_procs, pmc_mode=False,
-                                            plot=plot, which_step=step)
+                                            which_step=step)
 
             theta = np.asarray(output_record[step]['theta accepted']).T
             #print theta.shape
@@ -235,7 +235,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                             weights=weights,
                                             theta_prev=theta_prev,
                                             tau_squared=tau_squared,
-                                            plot=plot, which_step=step)
+                                            which_step=step)
 
             theta = np.asarray(output_record[step]['theta accepted']).T
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
