@@ -192,7 +192,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('n accepted', float),
                                            ('n total', float),
                                            ('epsilon', float),
-                                           ] )
+                                           ])
 
     epsilon = epsilon_0
 
@@ -244,7 +244,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
 
 
-            if epsilon == 0.0 :
+            if epsilon == 0.0:
                 epsilon = 0.001
 
             #print theta_prev
