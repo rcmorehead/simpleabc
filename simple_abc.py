@@ -136,7 +136,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
             attempts = int(float(trial_count)/float(accepted_count + 1) *
                         (min_particles - accepted_count))
 
-        return (posterior, rejected, distances,
+        return (posterior, distances,
                 accepted_count, trial_count,
                 epsilon)
     else:
@@ -174,9 +174,12 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
 
 
 
+        weights = np.ones(posterior.shape)
+        tau_squared = np.zeros((1, posterior.shape[0]))
+
         return (posterior, distances,
                 accepted_count, trial_count,
-                epsilon)
+                epsilon, weights, tau_squared)
 
 
 def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
@@ -192,6 +195,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('n accepted', float),
                                            ('n total', float),
                                            ('epsilon', float),
+                                           ('weights', object),
+                                           ('tau_squared', object)
                                            ])
 
     epsilon = epsilon_0
@@ -208,9 +213,9 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
             theta = np.asarray(output_record[step]['theta accepted']).T
             #print theta.shape
-            tau_squared = np.zeros((1, theta.shape[0]))
+            tau_squared = output_record[step]['tau_squared']
             #print tau_squared
-            weights = np.ones(theta.shape)
+            weights = output_record[step]['weights']
 
             for j in xrange(theta.shape[0]):
                 tau_squared[0][j] = 2*np.var(theta[j])
