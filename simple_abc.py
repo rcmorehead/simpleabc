@@ -255,6 +255,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             #print theta_prev
             weights = calc_weights(theta_prev, theta, tau_squared,
                                    weights_prev, prior=model.prior)
+
+            output_record[step]['weights'] = weights
             #print "w ",weights
             #print "sum(w) ",sum(weights[0]),sum(weights[1])
 
@@ -270,6 +272,9 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                 var_theta = np.sum((theta[j] - mean_theta)**2 * weights[j])
 
                 tau_squared[0][j] = 2*var_theta
+
+            output_record[step]['tau_squared'] = tau_squared
+
 
             print "Effective sample size(s): {}".format(effective_sample)
 
