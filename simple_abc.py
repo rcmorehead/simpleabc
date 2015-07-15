@@ -130,7 +130,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                     accepted_count += 1
                     trial_count += 1
                 else:
-                    rejected.append(thetas[j])
+                    #rejected.append(thetas[j])
                     trial_count += 1
 
             attempts = int(float(trial_count)/float(accepted_count + 1) *
@@ -170,10 +170,10 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                 posterior.append(theta)
                 distances.append(distance)
             else:
-                rejected.append(theta)
+                pass
+                #rejected.append(theta)
 
-
-
+        posterior = np.asarray(posterior).T
         weights = np.ones(posterior.shape)
         tau_squared = np.zeros((1, posterior.shape[0]))
 
@@ -211,7 +211,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                             n_procs=n_procs, pmc_mode=False,
                                             which_step=step)
 
-            theta = np.asarray(output_record[step]['theta accepted']).T
+            theta = output_record[step]['theta accepted']
             #print theta.shape
             tau_squared = output_record[step]['tau_squared']
             #print tau_squared
@@ -242,7 +242,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                             tau_squared=tau_squared,
                                             which_step=step)
 
-            theta = np.asarray(output_record[step]['theta accepted']).T
+            theta = output_record[step]['theta accepted']
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
 
