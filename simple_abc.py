@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod
 import multiprocessing
 import numpy as np
 from scipy import stats
+from numpy.lib.recfunctions import stack_arrays
 
 class Model(object):
     """
@@ -176,10 +177,11 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
         posterior = np.asarray(posterior).T
         weights = np.ones(posterior.shape)
         tau_squared = np.zeros((1, posterior.shape[0]))
+        eff_sample = np.ones(posterior.shape[0])*posterior.shape[1]
 
         return (posterior, distances,
                 accepted_count, trial_count,
-                epsilon, weights, tau_squared)
+                epsilon, weights, tau_squared, eff_sample)
 
 
 def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
@@ -197,15 +199,14 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('epsilon', float),
                                            ('weights', object),
                                            ('tau_squared', object)
+                                           ('eff sample size', object),
                                            ])
 
     if resume != None:
         steps = xrange(resume.size, resume.size + steps)
-        output_record = np.lib.recfunctions.stack_arrays((resume,
-                                                          output_record),
-                                                         asrecarray=True,
-                                                         usemask=False)
-        epsilon = resume['epsilion'][-1]
+        output_record = stack_arrays((resume, output_record), asrecarray=True,
+                                     usemask=False)
+        epsilon = resume['epsilon'][-1]
         theta = resume['theta accepted'][-1]
         weights = resume['weights'][-1]
         tau_squared = resume['tau_squared'][-1]
@@ -215,7 +216,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
         epsilon = epsilon_0
 
     for step in steps:
-        print step, epsilon
+        print 'Starting step {}'.format(step)
         if step == 0:
     #Fist ABC calculation
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
@@ -236,6 +237,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
 
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
+
 
 
             #print tau_squared
@@ -287,9 +289,8 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                 tau_squared[0][j] = 2*var_theta
 
             output_record[step]['tau_squared'] = tau_squared
+            output_record[step]['eff sample size'] = effective_sample
 
-
-            print "Effective sample size(s): {}".format(effective_sample)
 
     return output_record
 
