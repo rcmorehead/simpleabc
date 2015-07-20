@@ -206,7 +206,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
         steps = xrange(resume.size, resume.size + steps)
         output_record = stack_arrays((resume, output_record), asrecarray=True,
                                      usemask=False)
-        epsilon = stats.scoreatpercentile(output_record[-1]['D accepted'],
+        epsilon = stats.scoreatpercentile(resume[-1]['D accepted'],
                                               per=75)
         theta = resume['theta accepted'][-1]
         weights = resume['weights'][-1]
