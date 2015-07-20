@@ -198,7 +198,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('n total', float),
                                            ('epsilon', float),
                                            ('weights', object),
-                                           ('tau_squared', object)
+                                           ('tau_squared', object),
                                            ('eff sample size', object),
                                            ])
 
