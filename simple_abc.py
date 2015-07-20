@@ -183,7 +183,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
 
 
 def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
-              steps=10, parallel=False, n_procs='all'):
+              steps=10, resume=None, parallel=False, n_procs='all'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model using pmc.
@@ -199,9 +199,22 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
                                            ('tau_squared', object)
                                            ])
 
-    epsilon = epsilon_0
+    if resume != None:
+        steps = xrange(resume.size, resume.size + steps)
+        output_record = np.lib.recfunctions.stack_arrays((resume,
+                                                          output_record),
+                                                         asrecarray=True,
+                                                         usemask=False)
+        epsilon = resume['epsilion'][-1]
+        theta = resume['theta accepted'][-1]
+        weights = resume['weights'][-1]
+        tau_squared = resume['tau_squared'][-1]
 
-    for step in xrange(steps):
+    else:
+        steps = xrange(steps)
+        epsilon = epsilon_0
+
+    for step in steps:
         print step, epsilon
         if step == 0:
     #Fist ABC calculation
