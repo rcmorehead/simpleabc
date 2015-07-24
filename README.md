@@ -1,28 +1,21 @@
-SIMPLE-ABC
+SimpleABC
 ======
 
 A Python package for Approximate Bayesian Computation
-Version 0.1.2
+Version 0.2.0
 
 [Documentation](http://rcmorehead.github.io/SIMPLE-ABC/DOCS/_build/html/index.html)
 
-###WARNING! 
-This code is still very alpha, use at own risk! 
 
 TODO
 ----
 
-
+* Example scripts
 * Support alternate importance sampling kernel support in Model class
 * Set default importance sampling kernel
-* Allow PMC to be resarted from the middle of the run
-* Add effective sample size to ouput array
-* Save Importance Weights so that postierior samples are correct.
-* Make own version of triangle plot
 * More ABC algorithms 
 * Parallelize PMC  
 * Better parallellization all around 
-* Example scripts
 
 
 Install
@@ -38,6 +31,13 @@ HTTPS
 `git clone https://github.com/rcmorehead/SIMPLE-ABC.git`
 
 Maybe one day I'll set up pip, if you are lucky
+
+Overview
+--------
+
+![abc_overview.jpg](abc_overview.jpg)
+
+
 
 References
 ----------
