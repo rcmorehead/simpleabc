@@ -4,8 +4,6 @@ SimpleABC
 A Python package for Approximate Bayesian Computation
 Version 0.2.0
 
-[Documentation](http://rcmorehead.github.io/SIMPLE-ABC/DOCS/_build/html/index.html)
-
 
 TODO
 ----
@@ -15,7 +13,7 @@ TODO
 * Set default importance sampling kernel
 * More ABC algorithms 
 * Parallelize PMC  
-* Better parallellization all around 
+* Better parallelization all around 
 
 
 Install
