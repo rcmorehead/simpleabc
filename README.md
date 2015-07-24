@@ -35,7 +35,7 @@ Maybe one day I'll set up pip, if you are lucky
 Overview
 --------
 
-![abc_overview.jpg](abc_overview.jpg)
+![abc_overview.jpg](https://github.com/rcmorehead/simpleabc/blob/master/ABC_overview.jpg)
 
 
 
