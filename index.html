@@ -1,73 +1,45 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>SIMPLE-ABC by rcmorehead</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <meta charset="UTF-8">
+    <title>SimpleABC by rcmorehead</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/rcmorehead/SIMPLE-ABC">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/rcmorehead/SIMPLE-ABC/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/rcmorehead/SIMPLE-ABC/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <section class="page-header">
+      <h1 class="project-name">SimpleABC</h1>
+      <h2 class="project-tagline">&quot;A method of last resort, if you use ABC you should fall on your sword.&quot;     -D. Hogg</h2>
+      <a href="https://github.com/rcmorehead/simpleabc" class="btn">View on GitHub</a>
+      <a href="https://github.com/rcmorehead/simpleabc/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/rcmorehead/simpleabc/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>SIMPLE-ABC</h1>
-          <p>&quot;A method of last resort, if you use ABC you should fall on your sword.&quot;     -D. Hogg</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/rcmorehead">rcmorehead</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <h1>
-<a name="simple-abc" class="anchor" href="#simple-abc"><span class="octicon octicon-link"></span></a>SIMPLE-ABC</h1>
+    <section class="main-content">
+      <h1>
+<a id="simpleabc" class="anchor" href="#simpleabc" aria-hidden="true"><span class="octicon octicon-link"></span></a>SimpleABC</h1>
 
 <p>A Python package for Approximate Bayesian Computation
-Version 0.1.2</p>
-
-<p><a href="http://rcmorehead.github.io/SIMPLE-ABC/DOCS/_build/html/index.html">Documentation</a></p>
-
-<h3>
-<a name="warning" class="anchor" href="#warning"><span class="octicon octicon-link"></span></a>WARNING!</h3>
-
-<p>This code is still very alpha, use at own risk! </p>
+Version 0.2.0</p>
 
 <h2>
-<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>TODO</h2>
 
 <ul>
+<li>Example scripts</li>
 <li>Support alternate importance sampling kernel support in Model class</li>
 <li>Set default importance sampling kernel</li>
-<li>Allow PMC to be resarted from the middle of the run</li>
-<li>Add effective sample size to ouput array</li>
-<li>Save Importance Weights so that postierior samples are correct.</li>
-<li>Make own version of triangle plot</li>
 <li>More ABC algorithms </li>
 <li>Parallelize PMC<br>
 </li>
-<li>Better parallellization all around </li>
-<li>Example scripts</li>
-</ul><h2>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+<li>Better parallelization all around </li>
+</ul>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
 
 <p>Clone this <a href="http://rcmorehead.github.io/SIMPLE-ABC/">repo</a> with git.</p>
 
@@ -82,22 +54,33 @@ Version 0.1.2</p>
 <p>Maybe one day I'll set up pip, if you are lucky</p>
 
 <h2>
-<a name="references" class="anchor" href="#references"><span class="octicon octicon-link"></span></a>References</h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p><img src="https://github.com/rcmorehead/simpleabc/blob/master/ABC_overview.jpg" alt="abc_overview.jpg"></p>
+
+<h2>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span class="octicon octicon-link"></span></a>References</h2>
 
 <h3>
-<a name="abc" class="anchor" href="#abc"><span class="octicon octicon-link"></span></a>ABC</h3>
+<a id="abc" class="anchor" href="#abc" aria-hidden="true"><span class="octicon octicon-link"></span></a>ABC</h3>
 
 <p>Sunnåker et al. - <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3547661/">Approximate Bayesian Computation</a></p>
 
 <h3>
-<a name="population-monte-carlo-for-abc" class="anchor" href="#population-monte-carlo-for-abc"><span class="octicon octicon-link"></span></a>Population Monte Carlo for ABC</h3>
+<a id="population-monte-carlo-for-abc" class="anchor" href="#population-monte-carlo-for-abc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Population Monte Carlo for ABC</h3>
 
-<p>Beaumont et al. -<a href="http://biomet.oxfordjournals.org/content/96/4/983.abstract">Adaptive approximate Bayesian computation</a><br><a href="http://arxiv.org/abs/0805.2256">arxiv version</a></p>
-      </section>
+<p>Beaumont et al. -<a href="http://biomet.oxfordjournals.org/content/96/4/983.abstract">Adaptive approximate Bayesian computation</a><br>
+<a href="http://arxiv.org/abs/0805.2256">arxiv version</a></p>
 
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/rcmorehead/simpleabc">SimpleABC</a> is maintained by <a href="https://github.com/rcmorehead">rcmorehead</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -110,3 +93,4 @@ Version 0.1.2</p>
 
   </body>
 </html>
+
