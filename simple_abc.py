@@ -90,7 +90,7 @@ class Model(object):
 #########################    ABC Algorithms   ##################################
 ################################################################################
 
-def basic_abc(model, data, epsilon=0.1, min_particles=10,
+def basic_abc(model, data, epsilon=0.1, min_samples =10,
               parallel=False, n_procs='all', pmc_mode=False,
               weights='None', theta_prev='None', tau_squared='None',
               which_step=0):
@@ -107,10 +107,10 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
     data_summary_stats = model.summary_stats(data)
     #TODO Implement pmc option in parallel mode
     if parallel:
-        attempts = 2*min_particles
+        attempts = 2*min_samples 
         if n_procs == 'all':
             n_procs = multiprocessing.cpu_count()
-        while accepted_count < min_particles:
+        while accepted_count < min_samples :
             thetas = [model.draw_theta() for x in
                                xrange(attempts)]
 
@@ -135,13 +135,13 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                     trial_count += 1
 
             attempts = int(float(trial_count)/float(accepted_count + 1) *
-                        (min_particles - accepted_count))
+                        (min_samples  - accepted_count))
 
         return (posterior, distances,
                 accepted_count, trial_count,
                 epsilon)
     else:
-        while accepted_count <= min_particles:
+        while accepted_count <= min_samples :
 
             trial_count += 1
 
@@ -184,7 +184,7 @@ def basic_abc(model, data, epsilon=0.1, min_particles=10,
                 epsilon, weights, tau_squared, eff_sample)
 
 
-def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
+def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_samples =10,
               steps=10, resume=None, parallel=False, n_procs='all'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
@@ -221,7 +221,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
         if step == 0:
     #Fist ABC calculation
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
-                                            min_particles=min_particles,
+                                            min_samples =min_samples ,
                                             parallel=parallel,
                                             n_procs=n_procs, pmc_mode=False,
                                             which_step=step)
@@ -250,7 +250,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_particles=1000,
             theta_prev = theta
             weights_prev = weights
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
-                                            min_particles=min_particles,
+                                            min_samples =min_samples,
                                             parallel=parallel,
                                             n_procs= n_procs, pmc_mode=True,
                                             weights=weights,
