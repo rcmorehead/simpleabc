@@ -92,8 +92,7 @@ class Model(object):
 
 def basic_abc(model, data, epsilon=0.1, min_samples =10,
               parallel=False, n_procs='all', pmc_mode=False,
-              weights='None', theta_prev='None', tau_squared='None',
-              which_step=0):
+              weights='None', theta_prev='None', tau_squared='None'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
     model.
@@ -221,10 +220,9 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_samples =10,
         if step == 0:
     #Fist ABC calculation
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
-                                            min_samples =min_samples ,
+                                            min_samples=min_samples,
                                             parallel=parallel,
-                                            n_procs=n_procs, pmc_mode=False,
-                                            which_step=step)
+                                            n_procs=n_procs, pmc_mode=False)
 
             theta = output_record[step]['theta accepted']
             #print theta.shape
@@ -255,8 +253,7 @@ def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_samples =10,
                                             n_procs= n_procs, pmc_mode=True,
                                             weights=weights,
                                             theta_prev=theta_prev,
-                                            tau_squared=tau_squared,
-                                            which_step=step)
+                                            tau_squared=tau_squared)
 
             theta = output_record[step]['theta accepted']
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
