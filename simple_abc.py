@@ -103,6 +103,7 @@ def basic_abc(model, data, epsilon=0.1, min_samples =10,
     posterior, rejected, distances = [], [], []
     trial_count, accepted_count = 0, 0
 
+
     data_summary_stats = model.summary_stats(data)
     #TODO Implement pmc option in parallel mode
     if parallel:
