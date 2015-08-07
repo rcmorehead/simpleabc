@@ -90,12 +90,79 @@ class Model(object):
 #########################    ABC Algorithms   ##################################
 ################################################################################
 
-def basic_abc(model, data, epsilon=0.1, min_samples =10,
+def basic_abc(model, data, epsilon=1, min_samples=10,
               parallel=False, n_procs='all', pmc_mode=False,
               weights='None', theta_prev='None', tau_squared='None'):
     """
-    Preform Approximate Bayesian Computation on a data set given a forward
-    model.
+    Perform Approximate Bayesian Computation (ABC) on a data set given a
+    forward model.
+
+    ABC is a likelihood-free method of Bayesian inference that uses simulation
+    to approximate the true posterior distribution of a parameter. It is
+    appropriate to use in situations where:
+
+    The likelihood function is unknown or is too computationally
+    expensive to compute.
+
+    There exists a good forward model that can produce data sets
+    like the one of interest.
+
+    It is not a replacement for other methods when a likelihood
+    function is available!
+
+    Parameters
+    ----------
+    model : object
+        A model that is a subclass of simpleabc. Model
+    data  : object, array_like
+        The "observed" data set for inference.
+    epsilon : float, optional
+        The tolerance to accept parameter draws, default is 1.
+    min_samples : int, optional
+        Minimum number of posterior samples.
+    parallel : bool, optional
+        Run in parallel mode. Default is a single thread.
+    n_procs : int, str, optional
+        Number of subprocesses in parallel mode. Default is 'all' one for each
+        available core.
+    pmc_mode : bool, optional
+        Population Monte Carlo mode on or off. Default is False. This is not
+        meant to be called by the user, but is set by simple_abc.pmc_abc.
+    weights : object, array_like, str, optional
+        Importance sampling weights from previous PMC step. Used  by
+        simple_abc.pmc_abc only.
+    theta_prev : object, array_like, str, optional
+        Posterior draws from previous PMC step.  Used by simple_abc.pmc_abc
+        only.
+    tau_squared : object, array_like, str, optional
+        Previous Gaussian kernel variances. for importance sampling. Used by
+        simple_abc.pmc_abc only.
+
+    Returns
+    -------
+    posterior : numpy array
+        Array of posterior samples.
+    distances : object
+        Array of accepted distances.
+    accepted_count : float
+        Number of  posterior samples.
+    trial_count : float
+        Number of total samples attempted.
+    epsilon : float
+        Distance tolerance used.
+    weights : object
+        Importance sampling weights. Returns an array of 1s where size =
+        posterior.size when not in pmc mode.
+    tau_squared : object
+        Gaussian kernel variances. Returns an array of 0s where size =
+        posterior.size when not in pmc mode.
+    eff_sample : object
+        Effective sample size. Returns an array of 1s where size =
+        posterior.size when not in pmc mode.
+
+    Examples
+    --------
+    Forth coming.
 
     """
 
@@ -184,7 +251,7 @@ def basic_abc(model, data, epsilon=0.1, min_samples =10,
                 epsilon, weights, tau_squared, eff_sample)
 
 
-def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=0.25, min_samples =10,
+def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=1, min_samples =10,
               steps=10, resume=None, parallel=False, n_procs='all'):
     """
     Preform Approximate Bayesian Computation on a data set given a forward
