@@ -150,15 +150,15 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
         Number of total samples attempted.
     epsilon : float
         Distance tolerance used.
-    weights : object
-        Importance sampling weights. Returns an array of 1s where size =
-        posterior.size when not in pmc mode.
-    tau_squared : object
-        Gaussian kernel variances. Returns an array of 0s where size =
-        posterior.size when not in pmc mode.
-    eff_sample : object
-        Effective sample size. Returns an array of 1s where size =
-        posterior.size when not in pmc mode.
+    weights : numpy array
+        Importance sampling weights. Returns an array of 1s where
+        size = posterior.size when not in pmc mode.
+    tau_squared : numpy array
+        Gaussian kernel variances. Returns an array of 0s where
+        size = posterior.size when not in pmc mode.
+    eff_sample : numpy array
+        Effective sample size. Returns an array of 1s where
+        size = posterior.size when not in pmc mode.
 
     Examples
     --------
