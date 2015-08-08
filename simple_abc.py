@@ -113,7 +113,7 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
     Parameters
     ----------
     model : object
-        A model that is a subclass of simpleabc. Model
+        A model that is a subclass of simpleabc.Model
     data  : object, array_like
         The "observed" data set for inference.
     epsilon : float, optional
@@ -251,13 +251,66 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 epsilon, weights, tau_squared, eff_sample)
 
 
-def pmc_abc(model, data, target_epsilon=0.1, epsilon_0=1, min_samples =10,
+def pmc_abc(model, data, epsilon_0=1, min_samples=10,
               steps=10, resume=None, parallel=False, n_procs='all'):
     """
-    Preform Approximate Bayesian Computation on a data set given a forward
-    model using pmc.
+    Perform a sequence of ABC posterior approximations using the sequential
+    population Monte Carlo algorithm.
+
+
+    Parameters
+    ----------
+    model : object
+        A model that is a subclass of simpleabc.Model
+    data  : object, array_like
+        The "observed" data set for inference.
+    epsilon_0 : float, optional
+        The initial tolerance to accept parameter draws, default is 1.
+    min_samples : int, optional
+        Minimum number of posterior samples.
+    steps : int
+        The number of pmc steps to attempt
+    resume : numpy record array, optional
+        A record array of a previous pmc sequence to continue the sequence on.
+    parallel : bool, optional
+        Run in parallel mode. Default is a single thread.
+    n_procs : int, str, optional
+        Number of subprocesses in parallel mode. Default is 'all' one for each
+        available core.
+
+    Returns
+    -------
+
+    output_record : numpy record array
+        A record array containing all ABC output for each step indexed by step
+        (0, 1, ..., n,). Each step sub arrays is made up of the following
+        variables:
+    posterior : numpy array
+        Array of posterior samples.
+    distances : object
+        Array of accepted distances.
+    accepted_count : float
+        Number of  posterior samples.
+    trial_count : float
+        Number of total samples attempted.
+    epsilon : float
+        Distance tolerance used.
+    weights : numpy array
+        Importance sampling weights. Returns an array of 1s where
+        size = posterior.size when not in pmc mode.
+    tau_squared : numpy array
+        Gaussian kernel variances. Returns an array of 0s where
+        size = posterior.size when not in pmc mode.
+    eff_sample : numpy array
+        Effective sample size. Returns an array of 1s where
+        size = posterior.size when not in pmc mode.
+
+    Examples
+    --------
+    Forth coming.
 
     """
+
     output_record = np.empty(steps, dtype=[('theta accepted', object),
                                            #('theta rejected', object),
                                            ('D accepted', object),
