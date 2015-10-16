@@ -213,16 +213,24 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
             trial_count += 1
 
             if pmc_mode:
-                theta_star = []
-                theta = []
+                #theta_star = []
+                #theta = []
 
-                for j in xrange(theta_prev.shape[0]):
-                    theta_star.append(np.random.choice(theta_prev[j],
-                                         replace=True,
-                                         p=weights[j]))
-                    #print "t*,tu2: ",theta_star[j], np.sqrt(tau_squared[0][j])
-                    theta.append(stats.norm.rvs(loc=theta_star[j],
-                                    scale=np.sqrt(tau_squared[0][j])))
+                #for j in xrange(theta_prev.shape[0]):
+                #    theta_star.append(np.random.choice(theta_prev[j],
+                #                         replace=True,
+                #                         p=weights[j]))
+                #    #print "t*,tu2: ",theta_star[j], np.sqrt(tau_squared[0][j])
+                #    theta.append(stats.norm.rvs(loc=theta_star[j],
+                #                    scale=np.sqrt(tau_squared[0][j])))
+
+
+                theta_star = theta_prev[np.random.choice(
+                                        xrange(0, theta_prev.shape[1]),
+                                        replace=True, p=weights)]
+
+                theta = stats.multivariate_normal(theta_star, tau_squared)
+
 
             else:
                 theta = model.draw_theta()
