@@ -402,8 +402,9 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             #print "w ",weights
             #print "sum(w) ",sum(weights[0]),sum(weights[1])
 
-            n = theta[0].size
+            #n = theta[0].size
             #print weights_prev
+
             tau_squared = np.zeros((1, theta_prev.shape[0]))
             effective_sample = np.zeros((1, theta_prev.shape[0]))
             for j in xrange(theta.shape[0]):
@@ -421,21 +422,53 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
     return output_record
 
+#
+# def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
+#
+#     """
+#     Calculates importance weights
+#     """
+#     weights_new = np.zeros_like(theta)
+#
+#     for i in xrange(theta.shape[0]):
+#         for j in xrange(theta[i].size):
+#             weights_new[i][j] = (prior[i].pdf(theta[i][j]) /
+#                                 np.sum(weights[i]*stats.norm.pdf(theta[i],
+#                                                                  theta_prev[i],
+#                                 np.sqrt(tau_squared[0][i]))))
+#
+#         weights_new[i] = weights_new[i]/sum(weights_new[i])
+#         #print weights_new[i]
+#     return weights_new
 
 def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
-
     """
     Calculates importance weights
     """
-    weights_new = np.zeros_like(theta)
+    weights_new = np.zeros_like(weights)
+    norm = np.zeros(theta_prev.shape[1])
+    for i in xrange(theta.shape[1]):
+        prior_prob = np.zeros(theta[:, i].size)
+        for j in xrange(theta[:, i].size):
+            print theta[:, i][j]
+            prior_prob[j] = prior[j].pdf(theta[:, i][j])
+        #assumes independent priors
+        p = prior_prob.prod()
 
-    for i in xrange(theta.shape[0]):
-        for j in xrange(theta[i].size):
-            weights_new[i][j] = (prior[i].pdf(theta[i][j]) /
-                                np.sum(weights[i]*stats.norm.pdf(theta[i],
-                                                                 theta_prev[i],
-                                np.sqrt(tau_squared[0][i]))))
+        for j in xrange(theta_prev.shape[1]):
+            norm[j] = stats.multivariate_normal.pdf(theta[:, i],
+                                                    mean=theta_prev[:, j],
+                                                    cov=tau_squared)
 
-        weights_new[i] = weights_new[i]/sum(weights_new[i])
-        #print weights_new[i]
-    return weights_new
+        weights_new[i] = p/sum(weights * norm)
+
+    return weights_new/weights_new.sum()
+
+def weighted_covar(x, w):
+    """
+
+    :param x: 2 dimensional array-like, values
+    :param w: 1 dimensional array-like, weights
+    :return C: Weighted covariance of x
+    """
+    pass
