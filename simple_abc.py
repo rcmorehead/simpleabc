@@ -251,9 +251,9 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 #rejected.append(theta)
 
         posterior = np.asarray(posterior).T
-        weights = np.ones(posterior.shape)
-        tau_squared = np.zeros((1, posterior.shape[0]))
-        eff_sample = np.ones(posterior.shape[0])*posterior.shape[1]
+        weights = np.ones(posterior.shape[0])
+        tau_squared = np.zeros((posterior.shape[0], posterior.shape[0]))
+        eff_sample = posterior.shape[1]
 
         return (posterior, distances,
                 accepted_count, trial_count,
@@ -356,13 +356,9 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             theta = output_record[step]['theta accepted']
             #print theta.shape
-            tau_squared = output_record[step]['tau_squared']
+            tau_squared = 2 * np.cov(theta)
             #print tau_squared
-            weights = output_record[step]['weights']
-
-            for j in xrange(theta.shape[0]):
-                tau_squared[0][j] = 2*np.var(theta[j])
-                weights[j] = weights[j]*1/float(theta[j].size)
+            weights = np.ones(theta.shape[1]) * 1.0/theta.shape[1]
 
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
@@ -396,30 +392,15 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                 epsilon = 0.001
 
             #print theta_prev
-            weights = calc_weights(theta_prev, theta, tau_squared,
-                                   weights_prev, prior=model.prior)
+            effective_sample = effective_sample_size(weights_prev)
 
-            output_record[step]['weights'] = weights
-            #print "w ",weights
-            #print "sum(w) ",sum(weights[0]),sum(weights[1])
+            weights = calc_weights(theta_prev, theta, tau_squared, weights_prev,
+                                                        prior=model.prior)
 
-            #n = theta[0].size
-            #print weights_prev
+            output_record[step]['tau_squared'] = 2 weighted_covar(theta,
+                                                                  weights)
 
-            tau_squared = np.zeros((1, theta_prev.shape[0]))
-            effective_sample = np.zeros((1, theta_prev.shape[0]))
-            for j in xrange(theta.shape[0]):
-                w_sum = weights_prev[j].sum()
-                w_sum2 = sum(weights_prev[j]**2)
-                effective_sample[0][j] = (w_sum * w_sum) / w_sum2
-                mean_theta = np.sum(theta[j] * weights[j])
-                var_theta = np.sum((theta[j] - mean_theta)**2 * weights[j])
-
-                tau_squared[0][j] = 2*var_theta
-
-            output_record[step]['tau_squared'] = tau_squared
             output_record[step]['eff sample size'] = effective_sample
-
 
     return output_record
 
