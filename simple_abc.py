@@ -7,6 +7,7 @@ import multiprocessing
 import numpy as np
 from scipy import stats
 from numpy.lib.recfunctions import stack_arrays
+from numpy.testing import assert_almost_equal
 
 class Model(object):
     """
@@ -471,4 +472,16 @@ def weighted_covar(x, w):
     :param w: 1 dimensional array-like, weights
     :return C: Weighted covariance of x
     """
-    pass
+    sumw = w.sum()
+    assert_almost_equal(sumw, 1.0)
+    assert x.shape[1] == w.size
+    sum2 = np.sum(w**2)
+    xbar = [(w*x[i]).sum() for i in xrange(x.shape[0])]
+    covar = np.zeros((x.shape[0], x.shape[0]))
+    for k in xrange(x.shape[0]):
+        for j in xrange(x.shape[0]):
+            for i in xrange(x.shape[1]):
+                covar[j,k] += (x[j,i]-xbar[j])*(x[k,i]-xbar[k]) * w[i]
+
+    return covar * sumw/(sumw*sumw-sum2)
+
