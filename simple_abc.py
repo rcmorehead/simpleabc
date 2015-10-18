@@ -225,12 +225,11 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 #    theta.append(stats.norm.rvs(loc=theta_star[j],
                 #                    scale=np.sqrt(tau_squared[0][j])))
 
-
-                theta_star = theta_prev[np.random.choice(
+                theta_star = theta_prev[:, np.random.choice(
                                         xrange(0, theta_prev.shape[1]),
                                         replace=True, p=weights)]
 
-                theta = stats.multivariate_normal(theta_star, tau_squared)
+                theta = stats.multivariate_normal.rvs(theta_star, tau_squared)
 
 
             else:
@@ -251,9 +250,16 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 #rejected.append(theta)
 
         posterior = np.asarray(posterior).T
-        weights = np.ones(posterior.shape[0])
+
+        if len(posterior.shape) > 1:
+            n = posterior.shape[1]
+        else:
+            n = posterior.shape[0]
+
+
+        weights = np.ones(n)
         tau_squared = np.zeros((posterior.shape[0], posterior.shape[0]))
-        eff_sample = posterior.shape[1]
+        eff_sample = n
 
         return (posterior, distances,
                 accepted_count, trial_count,
@@ -397,7 +403,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             weights = calc_weights(theta_prev, theta, tau_squared, weights_prev,
                                                         prior=model.prior)
 
-            output_record[step]['tau_squared'] = 2 weighted_covar(theta,
+            output_record[step]['tau_squared'] = 2 * weighted_covar(theta,
                                                                   weights)
 
             output_record[step]['eff sample size'] = effective_sample
