@@ -485,3 +485,13 @@ def weighted_covar(x, w):
 
     return covar * sumw/(sumw*sumw-sum2)
 
+def effective_sample_size(w):
+    '''
+
+    :param w: array-like importance sampleing weights
+    :return: float, effective sample size
+    '''
+
+    sumw = sum(w)
+    sum2 = sum (w**2)
+    return sumw*sumw/sum2
