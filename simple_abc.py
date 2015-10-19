@@ -363,7 +363,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             theta = output_record[step]['theta accepted']
             #print theta.shape
             tau_squared = 2 * np.cov(theta)
-            #print tau_squared
+            print tau_squared
             weights = np.ones(theta.shape[1]) * 1.0/theta.shape[1]
 
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
@@ -376,13 +376,13 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             #print epsilon
 
         else:
-            #print weights
+            print weights, tau_squared
             theta_prev = theta
             weights_prev = weights
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
                                             min_samples =min_samples,
                                             parallel=parallel,
-                                            n_procs= n_procs, pmc_mode=True,
+                                            n_procs=n_procs, pmc_mode=True,
                                             weights=weights,
                                             theta_prev=theta_prev,
                                             tau_squared=tau_squared)
