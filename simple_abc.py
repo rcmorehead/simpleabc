@@ -369,7 +369,8 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
 
-
+            output_record[step]['weights'] = weights
+            output_record[step]['tau_squared'] = tau_squared
 
             #print tau_squared
             #print weights
