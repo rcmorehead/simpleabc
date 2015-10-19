@@ -365,7 +365,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             tau_squared = 2 * np.cov(theta)
             print tau_squared
             weights = np.ones(theta.shape[1]) * 1.0/theta.shape[1]
-
+            print weights
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
 
@@ -403,8 +403,9 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             weights = calc_weights(theta_prev, theta, tau_squared, weights_prev,
                                                         prior=model.prior)
 
-            output_record[step]['tau_squared'] = 2 * weighted_covar(theta,
-                                                                  weights)
+            tau_squared = 2 * weighted_covar(theta, weights)
+
+            output_record[step]['tau_squared'] = tau_squared
 
             output_record[step]['eff sample size'] = effective_sample
 
