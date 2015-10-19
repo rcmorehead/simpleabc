@@ -410,6 +410,8 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             output_record[step]['eff sample size'] = effective_sample
 
+            output_record[step]['weights'] = weights
+
     return output_record
 
 #
