@@ -224,12 +224,14 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 #    #print "t*,tu2: ",theta_star[j], np.sqrt(tau_squared[0][j])
                 #    theta.append(stats.norm.rvs(loc=theta_star[j],
                 #                    scale=np.sqrt(tau_squared[0][j])))
-
+                #print theta_prev
                 theta_star = theta_prev[:, np.random.choice(
                                         xrange(0, theta_prev.shape[1]),
                                         replace=True, p=weights/weights.sum())]
 
                 theta = stats.multivariate_normal.rvs(theta_star, tau_squared)
+                if np.isscalar(theta) == True:
+                    theta = [theta]
 
 
             else:
@@ -245,6 +247,7 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 accepted_count += 1
                 posterior.append(theta)
                 distances.append(distance)
+
             else:
                 pass
                 #rejected.append(theta)
@@ -363,9 +366,9 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             theta = output_record[step]['theta accepted']
             #print theta.shape
             tau_squared = 2 * np.cov(theta)
-            print tau_squared
+            #print tau_squared
             weights = np.ones(theta.shape[1]) * 1.0/theta.shape[1]
-            print weights
+            #print weights
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
 
@@ -377,7 +380,8 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             #print epsilon
 
         else:
-            print weights, tau_squared
+            #print weights, tau_squared
+            #print theta
             theta_prev = theta
             weights_prev = weights
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
@@ -392,7 +396,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             epsilon = stats.scoreatpercentile(output_record[step]['D accepted'],
                                               per=75)
 
-
+            #print theta
 
 
             if epsilon == 0.0:
