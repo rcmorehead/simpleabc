@@ -3,6 +3,7 @@ Module for Approximate Bayesian Computation
 
 """
 from abc import ABCMeta, abstractmethod
+from parallel_abc import par_basic_abc
 import multiprocessing
 import numpy as np
 from scipy import stats
@@ -209,7 +210,7 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 accepted_count, trial_count,
                 epsilon)
     else:
-        while accepted_count <= min_samples:
+        while accepted_count < min_samples:
 
             trial_count += 1
 
@@ -358,10 +359,35 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
         print 'Starting step {}'.format(step)
         if step == 0:
     #Fist ABC calculation
-            output_record[step] = basic_abc(model, data, epsilon=epsilon,
+
+            if parallel:
+                if n_procs == 'all':
+                    n_procs = multiprocessing.cpu_count()
+
+                chunk = np.ceil(min_samples/float(n_procs))
+                print chunk
+
+                pool = multiprocessing.Pool(n_procs)
+                pool_results = [pool.apply_async(basic_abc, args=(model, data),
+                                                kwds={'epsilon': epsilon,
+                                                    'min_samples': chunk,
+                                                    'pmc_mode': False})
+                                for i in xrange(n_procs)]
+
+                pool_results = [p.get() for p in pool_results]
+
+            #Shut down pool
+                pool.close()
+                pool.join()
+
+                output_record[step] = combine_parallel_output(pool_results)
+
+            else:
+
+
+                output_record[step] = basic_abc(model, data, epsilon=epsilon,
                                             min_samples=min_samples,
-                                            parallel=parallel,
-                                            n_procs=n_procs, pmc_mode=False)
+                                            parallel=False, pmc_mode=False)
 
             theta = output_record[step]['theta accepted']
             #print theta.shape
@@ -386,7 +412,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             weights_prev = weights
             output_record[step] = basic_abc(model, data, epsilon=epsilon,
                                             min_samples =min_samples,
-                                            parallel=parallel,
+                                            parallel=False,
                                             n_procs=n_procs, pmc_mode=True,
                                             weights=weights,
                                             theta_prev=theta_prev,
@@ -514,3 +540,19 @@ def effective_sample_size(w):
     sumw = sum(w)
     sum2 = sum (w**2)
     return sumw*sumw/sum2
+
+def combine_parallel_output(x):
+    posterior = np.hstack([p[0] for p in x])
+    distances = []
+    for p in x:
+        distances  + p[1]
+
+    accepted_count = sum([p[2] for p in x])
+    trial_count = sum([p[3] for p in x])
+    epsilon = x[0][4]
+    weights = np.hstack([p[5] for p in x])
+    tau_squared = x[0][6]
+    eff_sample = x[0][7]
+    return (posterior, distances,
+                accepted_count, trial_count,
+                epsilon, weights, tau_squared, eff_sample)
