@@ -341,6 +341,11 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                                            ('eff sample size', object),
                                            ])
 
+    if parallel:
+        if n_procs == 'all':
+            n_procs = multiprocessing.cpu_count()
+        pool = multiprocessing.Pool(n_procs)
+
     if resume != None:
         steps = xrange(resume.size, resume.size + steps)
         output_record = stack_arrays((resume, output_record), asrecarray=True,
@@ -361,13 +366,13 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
     #Fist ABC calculation
 
             if parallel:
-                if n_procs == 'all':
-                    n_procs = multiprocessing.cpu_count()
+                #if n_procs == 'all':
+                #    n_procs = multiprocessing.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
-                print chunk
+                print chunk, n_procs
 
-                pool = multiprocessing.Pool(n_procs)
+                #pool = multiprocessing.Pool(n_procs)
                 pool_results = [pool.apply_async(basic_abc, args=(model, data),
                                                 kwds={'epsilon': epsilon,
                                                     'min_samples': chunk,
@@ -377,8 +382,9 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                 pool_results = [p.get() for p in pool_results]
 
             #Shut down pool
-                pool.close()
-                pool.join()
+                #pool.close()
+                #pool.join()
+
 
                 output_record[step] = combine_parallel_output(pool_results)
 
@@ -410,7 +416,36 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             #print theta
             theta_prev = theta
             weights_prev = weights
-            output_record[step] = basic_abc(model, data, epsilon=epsilon,
+
+            if parallel:
+                #if n_procs == 'all':
+                #    n_procs = multiprocessing.cpu_count()
+
+                chunk = np.ceil(min_samples/float(n_procs))
+                print chunk, n_procs
+
+                #pool = multiprocessing.Pool(n_procs)
+                pool_results = [pool.apply_async(basic_abc, args=(model, data),
+                                                kwds={'epsilon': epsilon,
+                                                    'min_samples': chunk,
+                                                    'pmc_mode': True,
+                                                    'weights': weights,
+                                                    'theta_prev': theta_prev,
+                                                    'tau_squared': tau_squared})
+                                for i in xrange(n_procs)]
+
+                pool_results = [p.get() for p in pool_results]
+
+                #Shut down pool
+                #pool.close()
+                #pool.join()
+
+
+                output_record[step] = combine_parallel_output(pool_results)
+
+            else:
+
+                output_record[step] = basic_abc(model, data, epsilon=epsilon,
                                             min_samples =min_samples,
                                             parallel=False,
                                             n_procs=n_procs, pmc_mode=True,
@@ -441,6 +476,11 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             output_record[step]['eff sample size'] = effective_sample
 
             output_record[step]['weights'] = weights
+
+    if parallel:
+        #Shut down pool
+        pool.close()
+        pool.join()
 
     return output_record
 
@@ -545,7 +585,7 @@ def combine_parallel_output(x):
     posterior = np.hstack([p[0] for p in x])
     distances = []
     for p in x:
-        distances  + p[1]
+        distances = distances + p[1]
 
     accepted_count = sum([p[2] for p in x])
     trial_count = sum([p[3] for p in x])
