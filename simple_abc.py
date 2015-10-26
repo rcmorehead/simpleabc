@@ -354,7 +354,8 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                     n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
-                print "I am running {} on {} processors".format(chunk, n_procs)
+                print "Running {} particles on {} processors".format(chunk,
+                                                                     n_procs)
 
                 output = mp.Queue()
                 processes = [ABCProcess(target=parallel_basic_abc,
@@ -403,7 +404,8 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                     n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
-                print "I am running {} on {} processors".format(chunk, n_procs)
+                print "Running {} particles on {} processors".format(chunk,
+                                                                     n_procs)
 
                 output = mp.Queue()
                 processes = [ABCProcess(target=parallel_basic_abc,
