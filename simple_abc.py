@@ -60,6 +60,31 @@ class Model(object):
 
         return d
 
+    #These methods handle the serialization of the frozen scipy.stats
+    #distributions used for the priors when running in parallel mode
+    def __getstate__(self):
+        '''
+        Copies the state dict of the model and pulls the keyword arguements
+        out of self.prior to send to self.__setstate__
+        '''
+        result = self.__dict__.copy()
+        result['prior'] = [p.kwds for p in self.prior]
+        return result
+
+
+    def __setstate__(self, state):
+        '''
+        Reconstructs the frozen prior distributions with the keywords used to
+        make the oriniginal distribution objects acquired with self.__getstate__
+        '''
+        self.__dict__ = state
+        #Replace this line with calls to create the frozen distributions you
+        #are using for your prior, example:
+        #   new_prior = [stats.norm(**state['prior'][0]),
+        #               stats.uniform(**state['prior'][1])]
+        new_prior = []
+        self.__dict__['prior'] = new_prior
+
 
     @abstractmethod
     def draw_theta(self):
@@ -185,100 +210,53 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
 
 
     data_summary_stats = model.summary_stats(data)
-    #TODO Implement pmc option in parallel mode
 
-    if parallel:
-        attempts = 2*min_samples 
-        if n_procs == 'all':
-            n_procs = mp.cpu_count()
-        while accepted_count < min_samples :
-            thetas = [model.draw_theta() for x in
-                               xrange(attempts)]
+    while accepted_count < min_samples:
+        trial_count += 1
 
-            #Start a pool of workers
+        if pmc_mode:
+            theta_star = theta_prev[:, np.random.choice(
+                                    xrange(0, theta_prev.shape[1]),
+                                    replace=True, p=weights/weights.sum())]
 
-
-
-            pool = mp.Pool(n_procs)
-            ds = pool.map(model, thetas)
-
-            #Shut down pool
-            pool.close()
-            pool.join()
-
-            for j, d in enumerate(ds):
-                if d < epsilon:
-                    posterior.append(thetas[j])
-                    accepted_count += 1
-                    trial_count += 1
-                else:
-                    #rejected.append(thetas[j])
-                    trial_count += 1
-
-            attempts = int(float(trial_count)/float(accepted_count + 1) *
-                        (min_samples - accepted_count))
-
-        return (posterior, distances,
-                accepted_count, trial_count,
-                epsilon)
-    else:
-        while accepted_count < min_samples:
-            trial_count += 1
-
-            if pmc_mode:
-                #theta_star = []
-                #theta = []
-
-                #for j in xrange(theta_prev.shape[0]):
-                #    theta_star.append(np.random.choice(theta_prev[j],
-                #                         replace=True,
-                #                         p=weights[j]))
-                #    #print "t*,tu2: ",theta_star[j], np.sqrt(tau_squared[0][j])
-                #    theta.append(stats.norm.rvs(loc=theta_star[j],
-                #                    scale=np.sqrt(tau_squared[0][j])))
-                #print theta_prev
-                theta_star = theta_prev[:, np.random.choice(
-                                        xrange(0, theta_prev.shape[1]),
-                                        replace=True, p=weights/weights.sum())]
-
-                theta = stats.multivariate_normal.rvs(theta_star, tau_squared)
-                if np.isscalar(theta) == True:
-                    theta = [theta]
+            theta = stats.multivariate_normal.rvs(theta_star, tau_squared)
+            if np.isscalar(theta) == True:
+                theta = [theta]
 
 
-            else:
-                theta = model.draw_theta()
-
-            synthetic_data = model.generate_data(theta)
-
-            synthetic_summary_stats = model.summary_stats(synthetic_data)
-            distance = model.distance_function(data_summary_stats,
-                                               synthetic_summary_stats)
-
-            if distance < epsilon:
-                accepted_count += 1
-                posterior.append(theta)
-                distances.append(distance)
-
-            else:
-                pass
-                #rejected.append(theta)
-
-        posterior = np.asarray(posterior).T
-
-        if len(posterior.shape) > 1:
-            n = posterior.shape[1]
         else:
-            n = posterior.shape[0]
+            theta = model.draw_theta()
+
+        synthetic_data = model.generate_data(theta)
+
+        synthetic_summary_stats = model.summary_stats(synthetic_data)
+        distance = model.distance_function(data_summary_stats,
+                                           synthetic_summary_stats)
+
+        if distance < epsilon:
+            accepted_count += 1
+            posterior.append(theta)
+            distances.append(distance)
+
+        else:
+            pass
+            #rejected.append(theta)
+
+    posterior = np.asarray(posterior).T
+
+    if len(posterior.shape) > 1:
+        n = posterior.shape[1]
+    else:
+        n = posterior.shape[0]
 
 
-        weights = np.ones(n)
-        tau_squared = np.zeros((posterior.shape[0], posterior.shape[0]))
-        eff_sample = n
+    weights = np.ones(n)
+    tau_squared = np.zeros((posterior.shape[0], posterior.shape[0]))
+    eff_sample = n
 
-        return (posterior, distances,
-                accepted_count, trial_count,
-                epsilon, weights, tau_squared, eff_sample)
+    return (posterior, distances,
+            accepted_count, trial_count,
+            epsilon, weights, tau_squared, eff_sample)
 
 
 def pmc_abc(model, data, epsilon_0=1, min_samples=10,
@@ -352,11 +330,6 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                                            ('eff sample size', object),
                                            ])
 
-   # if parallel:
-   #     if n_procs == 'all':
-   #         n_procs = mp.cpu_count()
-   #     pool = mp.Pool(n_procs)
-
     if resume != None:
         steps = xrange(resume.size, resume.size + steps)
         output_record = stack_arrays((resume, output_record), asrecarray=True,
@@ -374,41 +347,28 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
     for step in steps:
         print 'Starting step {}'.format(step)
         if step == 0:
-    #Fist ABC calculation
+        #Fist ABC calculation
 
             if parallel:
                 if n_procs == 'all':
                     n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
-                print chunk, n_procs
+                print "I am running {} on {} processors".format(chunk, n_procs)
 
-                #pool = mp.Pool(n_procs)
-                #pool_results = [pool.apply_async(basic_abc, args=(model, data),
-                #                                kwds={'epsilon': epsilon,
-                #                                    'min_samples': chunk,
-                #                                    'pmc_mode': False})
-                #                for i in xrange(n_procs)]
-
-                #pool_results = [p.get() for p in pool_results]
                 output = mp.Queue()
                 processes = [ABCProcess(target=parallel_basic_abc,
                                         args=(model, data, output),
                                         kwargs={'epsilon': epsilon,
                                                 'min_samples': chunk,
                                                 'pmc_mode': False})
-                                for i in xrange(n_procs)]
+                                        for i in xrange(n_procs)]
 
                 for p in processes:
                     p.start()
                 for p in processes:
                     p.join()
                 results = [output.get() for p in processes]
-
-            #Shut down pool
-                #pool.close()
-                #pool.join()
-
 
                 output_record[step] = combine_parallel_output(results)
 
@@ -431,9 +391,6 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             output_record[step]['weights'] = weights
             output_record[step]['tau_squared'] = tau_squared
 
-            #print tau_squared
-            #print weights
-            #print epsilon
 
         else:
             #print weights, tau_squared
@@ -442,11 +399,11 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             weights_prev = weights
 
             if parallel:
-                #if n_procs == 'all':
-                #    n_procs = mp.cpu_count()
+                if n_procs == 'all':
+                    n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
-                print chunk, n_procs
+                print "I am running {} on {} processors".format(chunk, n_procs)
 
                 output = mp.Queue()
                 processes = [ABCProcess(target=parallel_basic_abc,
@@ -457,7 +414,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                                                 'weights': weights,
                                                 'theta_prev': theta_prev,
                                                 'tau_squared': tau_squared})
-                                for i in xrange(n_procs)]
+                                        for i in xrange(n_procs)]
 
                 for p in processes:
                     p.start()
@@ -465,33 +422,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                     p.join()
                 results = [output.get() for p in processes]
 
-            #Shut down pool
-                #pool.close()
-                #pool.join()
-
-
                 output_record[step] = combine_parallel_output(results)
-
-
-                # pool = mp.Pool(n_procs)
-                # pool_results = [pool.apply_async(basic_abc, args=(model, data),
-                #                                 kwds={'epsilon': epsilon,
-                #                                     'min_samples': chunk,
-                #                                     'pmc_mode': True,
-                #                                     'weights': weights,
-                #                                     'theta_prev': theta_prev,
-                #                                     'tau_squared': tau_squared})
-                #                 for i in xrange(n_procs)]
-
-                #pool_results = [p.get() for p in pool_results]
-
-                #results = [p.get() for p in results]
-                #Shut down pool
-                #pool.close()
-                #pool.join()
-
-
-                #output_record[step] = combine_parallel_output(results)
 
             else:
 
@@ -509,10 +440,6 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             #print theta
 
-
-            if epsilon == 0.0:
-                epsilon = 0.001
-
             #print theta_prev
             effective_sample = effective_sample_size(weights_prev)
 
@@ -527,31 +454,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             output_record[step]['weights'] = weights
 
-    #if parallel:
-        #Shut down pool
-    #    pool.close()
-    #    pool.join()
-
     return output_record
-
-#
-# def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
-#
-#     """
-#     Calculates importance weights
-#     """
-#     weights_new = np.zeros_like(theta)
-#
-#     for i in xrange(theta.shape[0]):
-#         for j in xrange(theta[i].size):
-#             weights_new[i][j] = (prior[i].pdf(theta[i][j]) /
-#                                 np.sum(weights[i]*stats.norm.pdf(theta[i],
-#                                                                  theta_prev[i],
-#                                 np.sqrt(tau_squared[0][i]))))
-#
-#         weights_new[i] = weights_new[i]/sum(weights_new[i])
-#         #print weights_new[i]
-#     return weights_new
 
 def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
     """
@@ -592,7 +495,7 @@ def calc_weights(theta_prev, theta, tau_squared, weights, prior="None"):
 
 def weighted_covar(x, w):
     """
-
+    Calculates weighted covariance matrix
     :param x: 1 or 2 dimensional array-like, values
     :param w: 1 dimensional array-like, weights
     :return C: Weighted covariance of x or weighted variance if x is 1d
@@ -621,17 +524,23 @@ def weighted_covar(x, w):
         return covar * sumw/(sumw*sumw-sum2)
 
 def effective_sample_size(w):
-    '''
-
+    """
+    Calculates effective sample size
     :param w: array-like importance sampleing weights
     :return: float, effective sample size
-    '''
+    """
 
     sumw = sum(w)
     sum2 = sum (w**2)
     return sumw*sumw/sum2
 
 def combine_parallel_output(x):
+    """
+    Combines multiple basic_abc output arrays into one (for parallel mode)
+    :param x: array of basic_abc output arrays
+    :return: Combined basic_abc output arrays
+    """
+
     posterior = np.hstack([p[0] for p in x])
     distances = []
     for p in x:
@@ -649,4 +558,12 @@ def combine_parallel_output(x):
 
 
 def parallel_basic_abc(data, model, output, **kwds):
+    """
+    Wrapper for running basic_abc in parallel and putting the outputs in a queue
+    :param data: same as basic_abc
+    :param model: same as basic_abc
+    :param output: multiprocess queue object
+    :param kwds: sames basic_abc
+    :return:
+    """
     output.put(basic_abc(data, model, **kwds))
