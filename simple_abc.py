@@ -4,11 +4,12 @@ Module for Approximate Bayesian Computation
 """
 from abc import ABCMeta, abstractmethod
 from parallel_abc import par_basic_abc
-import multiprocessing
+import multiprocessing as mp
 import numpy as np
 from scipy import stats
 from numpy.lib.recfunctions import stack_arrays
 from numpy.testing import assert_almost_equal
+import time
 
 class Model(object):
     """
@@ -175,10 +176,11 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
 
     data_summary_stats = model.summary_stats(data)
     #TODO Implement pmc option in parallel mode
+
     if parallel:
         attempts = 2*min_samples 
         if n_procs == 'all':
-            n_procs = multiprocessing.cpu_count()
+            n_procs = mp.cpu_count()
         while accepted_count < min_samples :
             thetas = [model.draw_theta() for x in
                                xrange(attempts)]
@@ -187,7 +189,7 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
 
 
 
-            pool = multiprocessing.Pool(n_procs)
+            pool = mp.Pool(n_procs)
             ds = pool.map(model, thetas)
 
             #Shut down pool
@@ -211,7 +213,6 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
                 epsilon)
     else:
         while accepted_count < min_samples:
-
             trial_count += 1
 
             if pmc_mode:
@@ -341,10 +342,10 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                                            ('eff sample size', object),
                                            ])
 
-    if parallel:
-        if n_procs == 'all':
-            n_procs = multiprocessing.cpu_count()
-        pool = multiprocessing.Pool(n_procs)
+   # if parallel:
+   #     if n_procs == 'all':
+   #         n_procs = mp.cpu_count()
+   #     pool = mp.Pool(n_procs)
 
     if resume != None:
         steps = xrange(resume.size, resume.size + steps)
@@ -366,27 +367,40 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
     #Fist ABC calculation
 
             if parallel:
-                #if n_procs == 'all':
-                #    n_procs = multiprocessing.cpu_count()
+                if n_procs == 'all':
+                    n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
                 print chunk, n_procs
 
-                #pool = multiprocessing.Pool(n_procs)
-                pool_results = [pool.apply_async(basic_abc, args=(model, data),
-                                                kwds={'epsilon': epsilon,
-                                                    'min_samples': chunk,
-                                                    'pmc_mode': False})
+                #pool = mp.Pool(n_procs)
+                #pool_results = [pool.apply_async(basic_abc, args=(model, data),
+                #                                kwds={'epsilon': epsilon,
+                #                                    'min_samples': chunk,
+                #                                    'pmc_mode': False})
+                #                for i in xrange(n_procs)]
+
+                #pool_results = [p.get() for p in pool_results]
+                output = mp.Queue()
+                processes = [mp.Process(target=parallel_basic_abc,
+                                        args=(model, data, output),
+                                        kwargs={'epsilon': epsilon,
+                                                'min_samples': chunk,
+                                                'pmc_mode': False})
                                 for i in xrange(n_procs)]
 
-                pool_results = [p.get() for p in pool_results]
+                for p in processes:
+                    p.start()
+                for p in processes:
+                    p.join()
+                results = [output.get() for p in processes]
 
             #Shut down pool
                 #pool.close()
                 #pool.join()
 
 
-                output_record[step] = combine_parallel_output(pool_results)
+                output_record[step] = combine_parallel_output(results)
 
             else:
 
@@ -419,29 +433,55 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             if parallel:
                 #if n_procs == 'all':
-                #    n_procs = multiprocessing.cpu_count()
+                #    n_procs = mp.cpu_count()
 
                 chunk = np.ceil(min_samples/float(n_procs))
                 print chunk, n_procs
 
-                #pool = multiprocessing.Pool(n_procs)
-                pool_results = [pool.apply_async(basic_abc, args=(model, data),
-                                                kwds={'epsilon': epsilon,
-                                                    'min_samples': chunk,
-                                                    'pmc_mode': True,
-                                                    'weights': weights,
-                                                    'theta_prev': theta_prev,
-                                                    'tau_squared': tau_squared})
+                output = mp.Queue()
+                processes = [mp.Process(target=parallel_basic_abc,
+                                        args=(model, data, output),
+                                        kwargs={'epsilon': epsilon,
+                                                'min_samples': chunk,
+                                                'pmc_mode': True,
+                                                'weights': weights,
+                                                'theta_prev': theta_prev,
+                                                'tau_squared': tau_squared})
                                 for i in xrange(n_procs)]
 
-                pool_results = [p.get() for p in pool_results]
+                for p in processes:
+                    p.start()
+                for p in processes:
+                    p.join()
+                results = [output.get() for p in processes]
 
+            #Shut down pool
+                #pool.close()
+                #pool.join()
+
+
+                output_record[step] = combine_parallel_output(results)
+
+
+                # pool = mp.Pool(n_procs)
+                # pool_results = [pool.apply_async(basic_abc, args=(model, data),
+                #                                 kwds={'epsilon': epsilon,
+                #                                     'min_samples': chunk,
+                #                                     'pmc_mode': True,
+                #                                     'weights': weights,
+                #                                     'theta_prev': theta_prev,
+                #                                     'tau_squared': tau_squared})
+                #                 for i in xrange(n_procs)]
+
+                #pool_results = [p.get() for p in pool_results]
+
+                #results = [p.get() for p in results]
                 #Shut down pool
                 #pool.close()
                 #pool.join()
 
 
-                output_record[step] = combine_parallel_output(pool_results)
+                #output_record[step] = combine_parallel_output(results)
 
             else:
 
@@ -477,10 +517,10 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
             output_record[step]['weights'] = weights
 
-    if parallel:
+    #if parallel:
         #Shut down pool
-        pool.close()
-        pool.join()
+    #    pool.close()
+    #    pool.join()
 
     return output_record
 
@@ -596,3 +636,7 @@ def combine_parallel_output(x):
     return (posterior, distances,
                 accepted_count, trial_count,
                 epsilon, weights, tau_squared, eff_sample)
+
+
+def parallel_basic_abc(data, model, output, **kwds):
+    output.put(basic_abc(data, model, **kwds))
