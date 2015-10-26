@@ -3,7 +3,6 @@ Module for Approximate Bayesian Computation
 
 """
 from abc import ABCMeta, abstractmethod
-from parallel_abc import par_basic_abc
 import multiprocessing as mp
 import numpy as np
 from scipy import stats
