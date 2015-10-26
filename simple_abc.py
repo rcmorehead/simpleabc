@@ -11,6 +11,16 @@ from numpy.lib.recfunctions import stack_arrays
 from numpy.testing import assert_almost_equal
 import time
 
+class ABCProcess(mp.Process):
+    '''
+
+    '''
+
+    def run(self):
+        np.random.seed()
+        if self._target:
+            self._target(*self._args, **self._kwargs)
+
 class Model(object):
     """
     Base class for constructing models for approximate bayesian computing
@@ -382,7 +392,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
 
                 #pool_results = [p.get() for p in pool_results]
                 output = mp.Queue()
-                processes = [mp.Process(target=parallel_basic_abc,
+                processes = [ABCProcess(target=parallel_basic_abc,
                                         args=(model, data, output),
                                         kwargs={'epsilon': epsilon,
                                                 'min_samples': chunk,
@@ -439,7 +449,7 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
                 print chunk, n_procs
 
                 output = mp.Queue()
-                processes = [mp.Process(target=parallel_basic_abc,
+                processes = [ABCProcess(target=parallel_basic_abc,
                                         args=(model, data, output),
                                         kwargs={'epsilon': epsilon,
                                                 'min_samples': chunk,
