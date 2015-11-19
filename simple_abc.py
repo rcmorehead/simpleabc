@@ -259,7 +259,8 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
 
 
 def pmc_abc(model, data, epsilon_0=1, min_samples=10,
-              steps=10, resume=None, parallel=False, n_procs='all'):
+            steps=10, resume=None, parallel=False, n_procs='all', 
+            sample_only=False):
     """
     Perform a sequence of ABC posterior approximations using the sequential
     population Monte Carlo algorithm.
@@ -444,10 +445,13 @@ def pmc_abc(model, data, epsilon_0=1, min_samples=10,
             #print theta_prev
             effective_sample = effective_sample_size(weights_prev)
 
-            weights = calc_weights(theta_prev, theta, tau_squared, weights_prev,
-                                                        prior=model.prior)
-
-            tau_squared = 2 * weighted_covar(theta, weights)
+            if sample_only:
+                weights = []
+                tau_squared = []
+            else:
+                weights = calc_weights(theta_prev, theta, tau_squared, 
+                                        weights_prev, prior=model.prior)
+                tau_squared = 2 * weighted_covar(theta, weights)
 
             output_record[step]['tau_squared'] = tau_squared
 
