@@ -48,6 +48,13 @@ class Model(object):
     def set_prior(self, prior):
         self.prior = prior
 
+    def set_epsilon(self, epsilon):
+        """
+        A method to give the model object the value of epsilon if your model 
+        code needs to know it.
+        """
+        self.epsilon = epsilon
+
     def generate_data_and_reduce(self, theta):
         """
         A combined method for generating data, calculating summary statistics
@@ -209,6 +216,7 @@ def basic_abc(model, data, epsilon=1, min_samples=10,
 
 
     data_summary_stats = model.summary_stats(data)
+    model.set_epsilon(epsilon)
 
     while accepted_count < min_samples:
         trial_count += 1
